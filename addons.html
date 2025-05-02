@@ -100,9 +100,42 @@
 
       message += `%0A%0ATotal: RM${calculateTotal().toFixed(2)}`;
 
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      window.open(url, "_blank");
-    }
+function submitOrder() {
+  const order = JSON.parse(localStorage.getItem('odenOrder'));
+  if (!order) {
+    alert('No order found.');
+    return;
+  }
+
+  // Get current date and time
+  const now = new Date();
+  const date = now.toLocaleDateString('en-MY');
+  const time = now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+  let message = `Oden Order:%0ASet: ${order.set} (RM${order.setPrice})`;
+
+  for (const [item, qty] of Object.entries(order.items)) {
+    if (qty > 0) message += `%0A${item}: ${qty}`;
+  }
+
+  const total = Object.entries(order.items).reduce((sum, [item, qty]) => {
+    const prices = {
+      'Instant Noodle': 1, 'Fish Cake': 1, 'Fuchuk': 1, 'Crab Stick': 1,
+      'Fish Ball': 2, 'Seafood Tofu': 2, 'Enoki Mushroom': 1, 'Cheese Tofu': 2,
+      'Egg': 1, 'White Radish': 2,
+      'Sprite': 2.5, 'Coca-Cola': 2.5, 'F&N Soda': 2.5, 'A&W': 2.5, 'Pepsi': 2.5
+    };
+    return sum + (prices[item] || 0) * qty;
+  }, order.setPrice);
+
+  message += `%0A%0ATotal: RM${total.toFixed(2)}`;
+  message += `%0AOrder Time: ${date}, ${time}`;
+
+  const phone = "601115701783";
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
 
     function goBack() {
       window.location.href = "index.html";
