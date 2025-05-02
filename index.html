@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,6 +33,7 @@
         <button onclick="selectSet('Premium', 15, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
       </div>
       <button onclick="clearSetSelection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Clear Set Selection</button>
+      <div id="set-contents" class="bg-orange-100 p-4 rounded text-orange-800 font-medium mt-4 hidden"></div>
     </div>
 
     <!-- Food & Drinks -->
@@ -65,6 +67,16 @@
     let activeButton = null;
     let additionalItems = {};
 
+    const setContents = {
+      'A': ['Fish Ball', 'Crab Stick', 'Seafood Tofu', 'Egg'],
+      'B': ['Fish Cake', 'Fish Ball', 'White Radish', 'Instant Noodle'],
+      'C': ['Seafood Tofu', 'Egg', 'Fuchuk', 'Instant Noodle'],
+      'D': ['Fish Cake', 'Fish Ball', 'Enoki Mushroom', 'Cheese Tofu'],
+      'E': ['Fuchuk', 'Fish Cake', 'Egg', 'Crab Stick', 'Fish Ball'],
+      'F': ['Enoki Mushroom', 'Fish Cake', 'Fish Ball', 'Seafood Tofu'],
+      'Premium': ['Fish Ball', 'Cheese Tofu', 'Crab Stick', 'Instant Noodle', 'Enoki Mushroom', 'Egg']
+    };
+
     const foodItems = [
       { name: 'Instant Noodle', price: 1 },
       { name: 'Fish Cake', price: 1 },
@@ -92,6 +104,16 @@
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       button.classList.add('bg-orange-200');
       activeButton = button;
+
+      const contents = setContents[name];
+      const setContentDiv = document.getElementById('set-contents');
+      if (contents) {
+        setContentDiv.innerHTML = `<strong>Includes:</strong><br>• ${contents.join('<br>• ')}`;
+        setContentDiv.classList.remove('hidden');
+      } else {
+        setContentDiv.classList.add('hidden');
+      }
+
       updateTotalPrice();
     }
 
@@ -100,6 +122,7 @@
       selectedSetPrice = 0;
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       activeButton = null;
+      document.getElementById('set-contents').classList.add('hidden');
       updateTotalPrice();
     }
 
