@@ -3,157 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add-ons & Drinks</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-    .item-name {
-      flex: 1;
-    }
-    .quantity {
-      display: flex;
-      align-items: center;
-    }
-    .quantity button {
-      width: 30px;
-      height: 30px;
-    }
-    .quantity span {
-      margin: 0 10px;
-      min-width: 20px;
-      text-align: center;
-    }
-    .total {
-      font-size: 1.5em;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .submit-btn {
-      display: block;
-      margin: 0 auto;
-      padding: 10px 20px;
-      font-size: 1em;
-    }
-  </style>
+  <title>Confirm Oden Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Add-ons & Drinks</h1>
+<body class="bg-orange-50 font-sans">
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-orange-700 mb-6 text-center">Confirm Your Oden Order</h1>
+    <div id="order-summary" class="bg-white p-4 rounded shadow mb-6"></div>
 
-  <h2>Add-ons (RM2 each)</h2>
-  <div id="addonsList">
-    <!-- Add-on items -->
-    <div class="item">
-      <span class="item-name">Cheese Tofu</span>
-      <div class="quantity">
-        <button onclick="adjustQuantity('Cheese Tofu', -1)">-</button>
-        <span id="qty-Cheese Tofu">0</span>
-        <button onclick="adjustQuantity('Cheese Tofu', 1)">+</button>
-      </div>
-    </div>
-
-    <div class="item">
-      <span class="item-name">White Radish (2 pcs)</span>
-      <div class="quantity">
-        <button onclick="adjustQuantity('White Radish', -1)">-</button>
-        <span id="qty-White Radish">0</span>
-        <button onclick="adjustQuantity('White Radish', 1)">+</button>
-      </div>
-    </div>
-    <!-- Add more add-ons here if needed -->
-  </div>
-
-  <h2>Drinks</h2>
-  <div id="drinksList">
-    <div class="item">
-      <span class="item-name">Mineral Water (RM1.50)</span>
-      <div class="quantity">
-        <button onclick="adjustQuantity('Mineral Water', -1)">-</button>
-        <span id="qty-Mineral Water">0</span>
-        <button onclick="adjustQuantity('Mineral Water', 1)">+</button>
-      </div>
-    </div>
-
-    <div class="item">
-      <span class="item-name">Green Tea (RM2.50)</span>
-      <div class="quantity">
-        <button onclick="adjustQuantity('Green Tea', -1)">-</button>
-        <span id="qty-Green Tea">0</span>
-        <button onclick="adjustQuantity('Green Tea', 1)">+</button>
-      </div>
+    <div class="text-center">
+      <button onclick="sendWhatsAppOrder()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow">
+        Submit Order via WhatsApp
+      </button>
     </div>
   </div>
-
-  <div class="total" id="grandTotal">Total: RM0.00</div>
-
-  <button class="submit-btn" onclick="submitOrder()">Submit Order</button>
 
   <script>
-    const prices = {
-      "Cheese Tofu": 2.00,
-      "White Radish": 2.00,
-      "Mineral Water": 1.50,
-      "Green Tea": 2.50,
-    };
+    const orderData = JSON.parse(localStorage.getItem('odenOrder'));
+    const foodItems = [
+      'Instant Noodle', 'Fish Cake', 'Fuchuk', 'Crab Stick', 'Fish Ball',
+      'Seafood Tofu', 'Enoki Mushroom', 'Cheese Tofu', 'Egg', 'White Radish'
+    ];
+    const drinkItems = ['Sprite', 'Coca-Cola', 'F&N Soda', 'A&W', 'Pepsi'];
 
-    let quantities = {
-      "Cheese Tofu": 0,
-      "White Radish": 0,
-      "Mineral Water": 0,
-      "Green Tea": 0,
-    };
-
-    function adjustQuantity(item, delta) {
-      quantities[item] = Math.max(0, (quantities[item] || 0) + delta);
-      document.getElementById("qty-" + item).innerText = quantities[item];
-      updateTotal();
-    }
-
-    function updateTotal() {
-      let addOnTotal = 0;
-      for (let item in quantities) {
-        addOnTotal += quantities[item] * prices[item];
+    function renderOrderSummary() {
+      if (!orderData) {
+        document.getElementById("order-summary").innerHTML = "<p class='text-red-600'>No order found.</p>";
+        return;
       }
 
-      const setPrice = parseFloat(localStorage.getItem("selectedSetPrice")) || 0;
-      const grandTotal = setPrice + addOnTotal;
+      let summaryHTML = `<h2 class="text-xl font-semibold mb-2">Selected Set: Set ${orderData.set} (RM${orderData.setPrice})</h2>`;
 
-      document.getElementById("grandTotal").innerText = `Total: RM${grandTotal.toFixed(2)}`;
+      const items = orderData.items;
+      const foodList = foodItems.filter(name => items[name] > 0);
+      const drinkList = drinkItems.filter(name => items[name] > 0);
+
+      if (foodList.length) {
+        summaryHTML += `<h3 class="text-lg font-semibold mt-4">Extra Food Items:</h3><ul class="list-disc list-inside">`;
+        foodList.forEach(name => {
+          summaryHTML += `<li>${name} x${items[name]}</li>`;
+        });
+        summaryHTML += `</ul>`;
+      }
+
+      if (drinkList.length) {
+        summaryHTML += `<h3 class="text-lg font-semibold mt-4">Drinks:</h3><ul class="list-disc list-inside">`;
+        drinkList.forEach(name => {
+          summaryHTML += `<li>${name} x${items[name]}</li>`;
+        });
+        summaryHTML += `</ul>`;
+      }
+
+      const total = calculateTotal();
+      summaryHTML += `<div class="text-xl font-bold mt-4">Total: RM${total.toFixed(2)}</div>`;
+
+      document.getElementById("order-summary").innerHTML = summaryHTML;
     }
 
-    function submitOrder() {
-      const selectedSet = localStorage.getItem("selectedSet") || "None";
-      const setPrice = parseFloat(localStorage.getItem("selectedSetPrice")) || 0;
+    function calculateTotal() {
+      let total = orderData.setPrice;
+      const prices = {
+        'Instant Noodle': 1, 'Fish Cake': 1, 'Fuchuk': 1, 'Crab Stick': 1,
+        'Fish Ball': 2, 'Seafood Tofu': 2, 'Enoki Mushroom': 1, 'Cheese Tofu': 2,
+        'Egg': 1, 'White Radish': 2,
+        'Sprite': 2.5, 'Coca-Cola': 2.5, 'F&N Soda': 2.5, 'A&W': 2.5, 'Pepsi': 2.5
+      };
 
-      let orderSummary = `Set: ${selectedSet} (RM${setPrice.toFixed(2)})\n\nAdd-ons & Drinks:\n`;
+      for (let name in orderData.items) {
+        total += prices[name] * orderData.items[name];
+      }
+      return total;
+    }
 
-      for (let item in quantities) {
-        if (quantities[item] > 0) {
-          orderSummary += `${item}: ${quantities[item]} x RM${prices[item].toFixed(2)}\n`;
+    function sendWhatsAppOrder() {
+      const phone = "01115701783";
+      let message = `Oden Order:%0ASet: ${orderData.set} (RM${orderData.setPrice})`;
+
+      for (let name in orderData.items) {
+        if (orderData.items[name] > 0) {
+          message += `%0A${name}: ${orderData.items[name]}`;
         }
       }
 
-      const grandTotal = document.getElementById("grandTotal").innerText;
-
-      alert(`${orderSummary}\n${grandTotal}\n\nThank you for your order!`);
-      // Optionally reset or send to a backend
+      message += `%0ATotal: RM${calculateTotal().toFixed(2)}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
     }
 
-    // Calculate total on page load in case of reload
-    window.addEventListener("DOMContentLoaded", updateTotal);
+    renderOrderSummary();
   </script>
 </body>
 </html>
