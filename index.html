@@ -2,240 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Order Oden - Starting From RM6</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oden Order</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff6e6;
-      color: #333;
-    }
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-      background: #ffe6cc;
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
     h1 {
-      margin-top: 1rem;
-      font-size: 2.2rem;
-    }
-    .price {
-      font-size: 1.5rem;
-      color: #d32f2f;
-      font-weight: bold;
-    }
-    .menu {
-      padding: 2rem 1rem;
       text-align: center;
     }
-    .items {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
+    .set {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
     }
-    .item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 200px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
-    .item label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-weight: bold;
-    }
-    .item small {
-      display: block;
-      font-size: 0.9rem;
-      color: #666;
-    }
-    .order-btn, .next-btn {
-      margin-top: 2rem;
-      background: #d32f2f;
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
+    .set button {
+      margin-top: 10px;
     }
     .total {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .quantity-control {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .quantity-control button {
-      padding: 0.4rem 0.8rem;
-      font-size: 1rem;
-    }
-    .quantity-control input {
-      width: 40px;
+      font-size: 1.5em;
       text-align: center;
-      font-size: 1rem;
+      margin: 20px 0;
+    }
+    .next-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      font-size: 1em;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Delicious Oden Bowls</h1>
-    <p class="price">Starting from RM6</p>
-  </header>
+  <h1>Choose Your Oden Set</h1>
 
-  <section class="menu">
-    <h2>Choose Your Set</h2>
-    <div class="items">
-      <div class="item" onclick="selectSet('Set A', 6)">
-        <label>Set A (RM6)</label>
-        <small>Fish Cake, Egg, Instant Noodle</small>
-      </div>
-      <div class="item" onclick="selectSet('Set B', 6)">
-        <label>Set B (RM6)</label>
-        <small>Crab Stick, Fuchuk, Enoki Mushroom</small>
-      </div>
-      <div class="item" onclick="selectSet('Set C', 8)">
-        <label>Set C (RM8)</label>
-        <small>Cheese Tofu, Fish Ball, Seafood Tofu</small>
-      </div>
-      <div class="item" onclick="selectSet('Set D', 8)">
-        <label>Set D (RM8)</label>
-        <small>Egg, White Radish, Fish Cake</small>
-      </div>
-      <div class="item" onclick="selectSet('Set E', 10)">
-        <label>Set E (RM10)</label>
-        <small>Seafood Tofu, Enoki Mushroom, Instant Noodle</small>
-      </div>
-      <div class="item" onclick="selectSet('Set F', 10)">
-        <label>Set F (RM10)</label>
-        <small>Fuchuk, Crab Stick, White Radish</small>
-      </div>
-      <div class="item" onclick="selectSet('Premium Set', 15)">
-        <label>Premium Set (RM15)</label>
-        <small>Cheese Tofu, Fish Ball, Seafood Tofu, Egg, White Radish</small>
-      </div>
-    </div>
-  </section>
-
-  <section class="menu">
-    <h2>Choose Individual Items</h2>
-    <div class="items">
-      <div class="item"><label>Instant Noodle (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('noodle', -1)">-</button><input type="text" id="noodle" value="0" readonly><button onclick="updateItemQty('noodle', 1)">+</button></div></div>
-      <div class="item"><label>Fish Cake (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('fishcake', -1)">-</button><input type="text" id="fishcake" value="0" readonly><button onclick="updateItemQty('fishcake', 1)">+</button></div></div>
-      <div class="item"><label>Fuchuk (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('fuchuk', -1)">-</button><input type="text" id="fuchuk" value="0" readonly><button onclick="updateItemQty('fuchuk', 1)">+</button></div></div>
-      <div class="item"><label>Crab Stick (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('crab', -1)">-</button><input type="text" id="crab" value="0" readonly><button onclick="updateItemQty('crab', 1)">+</button></div></div>
-      <div class="item"><label>Fish Ball (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('fishball', -1)">-</button><input type="text" id="fishball" value="0" readonly><button onclick="updateItemQty('fishball', 1)">+</button></div></div>
-      <div class="item"><label>Seafood Tofu (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('seafood', -1)">-</button><input type="text" id="seafood" value="0" readonly><button onclick="updateItemQty('seafood', 1)">+</button></div></div>
-      <div class="item"><label>Enoki Mushroom (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('enoki', -1)">-</button><input type="text" id="enoki" value="0" readonly><button onclick="updateItemQty('enoki', 1)">+</button></div></div>
-      <div class="item"><label>Cheese Tofu (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('cheese', -1)">-</button><input type="text" id="cheese" value="0" readonly><button onclick="updateItemQty('cheese', 1)">+</button></div></div>
-      <div class="item"><label>Egg (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('egg', -1)">-</button><input type="text" id="egg" value="0" readonly><button onclick="updateItemQty('egg', 1)">+</button></div></div>
-      <div class="item"><label>White Radish (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('radish', -1)">-</button><input type="text" id="radish" value="0" readonly><button onclick="updateItemQty('radish', 1)">+</button></div></div>
-    </div>
-  </section>
-
-  <section class="menu">
-    <h2>Select Your Drink</h2>
-    <div class="items">
-      <div class="item">
-        <label>SPRITE (RM2.5)</label>
-        <div class="quantity-control">
-          <button onclick="updateDrinkQty('sprite', -1)">-</button>
-          <input type="text" id="sprite" value="0" readonly />
-          <button onclick="updateDrinkQty('sprite', 1)">+</button>
-        </div>
-      </div>
-      <div class="item">
-        <label>COCA-COLA (RM2.5)</label>
-        <div class="quantity-control">
-          <button onclick="updateDrinkQty('coke', -1)">-</button>
-          <input type="text" id="coke" value="0" readonly />
-          <button onclick="updateDrinkQty('coke', 1)">+</button>
-        </div>
-      </div>
-      <div class="item">
-        <label>F&N SODA (RM2.5)</label>
-        <div class="quantity-control">
-          <button onclick="updateDrinkQty('fn', -1)">-</button>
-          <input type="text" id="fn" value="0" readonly />
-          <button onclick="updateDrinkQty('fn', 1)">+</button>
-        </div>
-      </div>
-      <div class="item">
-        <label>A&W (RM2.5)</label>
-        <div class="quantity-control">
-          <button onclick="updateDrinkQty('anw', -1)">-</button>
-          <input type="text" id="anw" value="0" readonly />
-          <button onclick="updateDrinkQty('anw', 1)">+</button>
-        </div>
-      </div>
-      <div class="item">
-        <label>PEPSI (RM2.5)</label>
-        <div class="quantity-control">
-          <button onclick="updateDrinkQty('pepsi', -1)">-</button>
-          <input type="text" id="pepsi" value="0" readonly />
-          <button onclick="updateDrinkQty('pepsi', 1)">+</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="menu">
-    <div class="total" id="totalDisplay">Total: RM0</div>
-    <button class="next-btn" onclick="goToNextPage()">Next</button>
+  <div class="set">
+    <h3>Set A (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, White Tofu, White Radish, Fish Cake, Crab Stick</p>
+    <button onclick="selectSet('Set A', 9.90)">Select Set A</button>
   </div>
+
+  <div class="set">
+    <h3>Set B (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, Fishball, Lobster Ball, Fish Cake, Crab Stick</p>
+    <button onclick="selectSet('Set B', 9.90)">Select Set B</button>
+  </div>
+
+  <div class="set">
+    <h3>Set C (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, White Tofu, White Radish, Fish Cake, Egg</p>
+    <button onclick="selectSet('Set C', 9.90)">Select Set C</button>
+  </div>
+
+  <div class="set">
+    <h3>Set D (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, White Tofu, White Radish, Egg, Fish Ball</p>
+    <button onclick="selectSet('Set D', 9.90)">Select Set D</button>
+  </div>
+
+  <div class="set">
+    <h3>Set E (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, Fish Ball, Lobster Ball, Fish Cake, Egg</p>
+    <button onclick="selectSet('Set E', 9.90)">Select Set E</button>
+  </div>
+
+  <div class="set">
+    <h3>Set F (5 pcs) - RM9.90</h3>
+    <p>Items: Cheese Tofu, White Tofu, Egg, Fish Cake, Crab Stick</p>
+    <button onclick="selectSet('Set F', 9.90)">Select Set F</button>
+  </div>
+
+  <div class="set">
+    <h3>Premium Set (5 pcs) - RM11.90</h3>
+    <p>Items: Cheese Tofu, Fish Roe Ball, Lobster Ball, White Radish, Egg</p>
+    <button onclick="selectSet('Premium Set', 11.90)">Select Premium Set</button>
+  </div>
+
+  <div class="total" id="totalPrice">Total: RM0.00</div>
+
+  <button class="next-btn" onclick="goToNextPage()">Next</button>
 
   <script>
     let selectedSetPrice = 0;
-    let drinks = { sprite: 0, coke: 0, fn: 0, anw: 0, pepsi: 0 };
-    let items = {
-      noodle: 0, fishcake: 0, fuchuk: 0, crab: 0,
-      fishball: 0, seafood: 0, enoki: 0, cheese: 0, egg: 0, radish: 0
-    };
 
     function selectSet(name, price) {
       selectedSetPrice = price;
+      localStorage.setItem("selectedSet", name);
+      localStorage.setItem("selectedSetPrice", price);
       updateTotal();
       alert(name + ' selected.');
     }
 
-    function updateDrinkQty(drink, change) {
-      drinks[drink] = Math.max(0, drinks[drink] + change);
-      document.getElementById(drink).value = drinks[drink];
-      updateTotal();
-    }
-
-    function updateItemQty(item, change) {
-      items[item] = Math.max(0, items[item] + change);
-      document.getElementById(item).value = items[item];
-      updateTotal();
-    }
-
     function updateTotal() {
-      const drinkTotal = (
-        drinks.sprite + drinks.coke + drinks.fn + drinks.anw + drinks.pepsi
-      ) * 2.5;
-      const itemTotal =
-        (items.noodle + items.fishcake + items.fuchuk + items.crab +
-         items.enoki + items.egg) * 1 +
-        (items.fishball + items.seafood + items.cheese) * 2 +
-        items.radish * 2;
-      const total = selectedSetPrice + drinkTotal + itemTotal;
-      document.getElementById('totalDisplay').innerText = 'Total: RM' + total.toFixed(2);
+      document.getElementById("totalPrice").innerText = `Total: RM${selectedSetPrice.toFixed(2)}`;
     }
 
     function goToNextPage() {
-      window.location.href = 'addons.html.html';
+      if (selectedSetPrice === 0) {
+        alert("Please select a set before proceeding.");
+        return;
+      }
+      window.location.href = "addons.html";
     }
+
+    // Load any previously selected set when page reloads
+    window.addEventListener("DOMContentLoaded", () => {
+      const price = localStorage.getItem("selectedSetPrice");
+      if (price) {
+        selectedSetPrice = parseFloat(price);
+        updateTotal();
+      }
+    });
   </script>
 </body>
 </html>
