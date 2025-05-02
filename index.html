@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +19,16 @@
         class="w-full p-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-orange-500" required />
     </div>
 
+    <!-- Soup Flavour Selection -->
+    <div class="mb-4">
+      <label class="block text-lg font-semibold mb-2 text-orange-800">Choose Soup Flavour</label>
+      <select id="soupFlavour"
+        class="w-full p-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <option value="Original Flavour">Original Flavour</option>
+        <option value="Tom Yam">Tom Yam</option>
+      </select>
+    </div>
+
     <!-- Set Selection -->
     <div class="mb-6">
       <h2 class="text-2xl font-bold text-orange-700 mb-4">🍢 Choose Your Set</h2>
@@ -33,7 +42,6 @@
         <button onclick="selectSet('Premium', 15, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
       </div>
       <button onclick="clearSetSelection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Clear Set Selection</button>
-      <div id="set-contents" class="bg-orange-100 p-4 rounded text-orange-800 font-medium mt-4 hidden"></div>
     </div>
 
     <!-- Food & Drinks -->
@@ -67,16 +75,6 @@
     let activeButton = null;
     let additionalItems = {};
 
-    const setContents = {
-      'A': ['Fish Ball', 'Crab Stick', 'Seafood Tofu', 'Egg'],
-      'B': ['Fish Cake', 'Fish Ball', 'White Radish', 'Instant Noodle'],
-      'C': ['Seafood Tofu', 'Egg', 'Fuchuk', 'Instant Noodle'],
-      'D': ['Fish Cake', 'Fish Ball', 'Enoki Mushroom', 'Cheese Tofu'],
-      'E': ['Fuchuk', 'Fish Cake', 'Egg', 'Crab Stick', 'Fish Ball'],
-      'F': ['Enoki Mushroom', 'Fish Cake', 'Fish Ball', 'Seafood Tofu'],
-      'Premium': ['Fish Ball', 'Cheese Tofu', 'Crab Stick', 'Instant Noodle', 'Enoki Mushroom', 'Egg']
-    };
-
     const foodItems = [
       { name: 'Instant Noodle', price: 1 },
       { name: 'Fish Cake', price: 1 },
@@ -104,16 +102,6 @@
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       button.classList.add('bg-orange-200');
       activeButton = button;
-
-      const contents = setContents[name];
-      const setContentDiv = document.getElementById('set-contents');
-      if (contents) {
-        setContentDiv.innerHTML = `<strong>Includes:</strong><br>• ${contents.join('<br>• ')}`;
-        setContentDiv.classList.remove('hidden');
-      } else {
-        setContentDiv.classList.add('hidden');
-      }
-
       updateTotalPrice();
     }
 
@@ -122,7 +110,6 @@
       selectedSetPrice = 0;
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       activeButton = null;
-      document.getElementById('set-contents').classList.add('hidden');
       updateTotalPrice();
     }
 
@@ -185,13 +172,15 @@
       const name = document.getElementById('customerName').value.trim();
       if (!name) return alert("Please enter your name!");
 
+      const flavour = document.getElementById('soupFlavour').value;
+
       const now = new Date();
       const dateTime = now.toLocaleString('en-GB', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit', hour12: true
       }).replace(',', '');
 
-      let message = `🧡 Oden Order 🧡%0A👤 Name: ${name}`;
+      let message = `🧡 Oden Order 🧡%0A👤 Name: ${name}%0A🍲 Soup Flavour: ${flavour}`;
       if (selectedSet) message += `%0A🍢 Set: ${selectedSet} (RM${selectedSetPrice.toFixed(2)})`;
 
       message += `%0A%0A--- Items ---`;
