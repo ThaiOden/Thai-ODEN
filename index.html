@@ -85,7 +85,17 @@
       Total Price: RM<span id="totalPrice">0.00</span>
     </div>
 
+    <!-- Navigation to Next Page -->
+    <div class="text-right mt-6">
+      <a href="addons.html" onclick="saveSelections()">
+        <button class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-6 rounded shadow">
+          Next
+        </button>
+      </a>
+    </div>
+
     <script>
+      let selectedSet = null;
       let selectedSetPrice = 0;
       let activeButton = null;
       let additionalItems = {};
@@ -100,15 +110,15 @@
         { name: 'Enoki Mushroom', price: 1 },
         { name: 'Cheese Tofu', price: 2 },
         { name: 'Egg', price: 1 },
-        { name: 'White Radish', price: 1 },
+        { name: 'White Radish', price: 2 },
       ];
 
       const drinkItems = [
-        { name: 'Sprite', price: 3 },
-        { name: 'Coca-Cola', price: 3 },
-        { name: 'F&N Soda', price: 3 },
-        { name: 'A&W', price: 3 },
-        { name: 'Pepsi', price: 3 },
+        { name: 'Sprite', price: 2.5 },
+        { name: 'Coca-Cola', price: 2.5 },
+        { name: 'F&N Soda', price: 2.5 },
+        { name: 'A&W', price: 2.5 },
+        { name: 'Pepsi', price: 2.5 },
       ];
 
       function createItemControls(containerId, items) {
@@ -118,7 +128,9 @@
           wrapper.className = 'flex justify-between items-center bg-white p-2 rounded shadow';
 
           const name = document.createElement('span');
-          name.textContent = `${item.name} (RM${item.price})`;
+          name.textContent = item.name === 'White Radish'
+            ? `${item.name} (RM${item.price} for 2 pcs)`
+            : `${item.name} (RM${item.price})`;
 
           const controls = document.createElement('div');
           controls.className = 'flex items-center space-x-2';
@@ -160,6 +172,7 @@
       }
 
       function selectSet(setName, price, button) {
+        selectedSet = setName;
         selectedSetPrice = price;
         updateTotalPrice();
 
@@ -171,6 +184,7 @@
       }
 
       function clearSetSelection() {
+        selectedSet = null;
         selectedSetPrice = 0;
         if (activeButton) {
           activeButton.classList.remove('bg-orange-200');
@@ -186,6 +200,15 @@
           total += price * additionalItems[item];
         }
         document.getElementById("totalPrice").textContent = total.toFixed(2);
+      }
+
+      function saveSelections() {
+        const order = {
+          set: selectedSet,
+          setPrice: selectedSetPrice,
+          items: additionalItems,
+        };
+        localStorage.setItem('odenOrder', JSON.stringify(order));
       }
 
       createItemControls('food-items', foodItems);
