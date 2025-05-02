@@ -2,11 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Add-ons & Drinks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oden Add-ons and Drinks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff6e6;
+      margin: 0;
+      padding: 1rem;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #d32f2f;
+    }
+    .section {
+      margin-top: 2rem;
+    }
+    .items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 180px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .item label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .quantity-control button {
+      font-size: 1rem;
+      padding: 0.3rem 0.6rem;
+    }
+    .quantity-control input {
+      width: 40px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .total {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    .submit-btn {
+      display: block;
+      margin: 2rem auto;
+      background: #d32f2f;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Add-ons Page</h1>
-  <p>This is where users can select additional toppings or drinks.</p>
-  <a href="index.html">← Back to main page</a>
+  <h2>Add-ons & Drinks</h2>
+
+  <div class="section">
+    <h3 style="text-align:center">Add-ons (RM2 each)</h3>
+    <div class="items">
+      <div class="item"><label>Cheese Tofu</label><div class="quantity-control"><button onclick="updateAddonQty('cheese', -1)">-</button><input type="text" id="cheese" value="0" readonly><button onclick="updateAddonQty('cheese', 1)">+</button></div></div>
+      <div class="item"><label>Fish Ball</label><div class="quantity-control"><button onclick="updateAddonQty('fishball', -1)">-</button><input type="text" id="fishball" value="0" readonly><button onclick="updateAddonQty('fishball', 1)">+</button></div></div>
+      <div class="item"><label>Seafood Tofu</label><div class="quantity-control"><button onclick="updateAddonQty('seafood', -1)">-</button><input type="text" id="seafood" value="0" readonly><button onclick="updateAddonQty('seafood', 1)">+</button></div></div>
+      <div class="item"><label>White Radish (2 pcs)</label><div class="quantity-control"><button onclick="updateAddonQty('radish', -1)">-</button><input type="text" id="radish" value="0" readonly><button onclick="updateAddonQty('radish', 1)">+</button></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 style="text-align:center">Drinks (RM2.5 each)</h3>
+    <div class="items">
+      <div class="item"><label>SPRITE</label><div class="quantity-control"><button onclick="updateDrinkQty('sprite', -1)">-</button><input type="text" id="sprite" value="0" readonly><button onclick="updateDrinkQty('sprite', 1)">+</button></div></div>
+      <div class="item"><label>COCA - COLA</label><div class="quantity-control"><button onclick="updateDrinkQty('coke', -1)">-</button><input type="text" id="coke" value="0" readonly><button onclick="updateDrinkQty('coke', 1)">+</button></div></div>
+      <div class="item"><label>F&N SODA</label><div class="quantity-control"><button onclick="updateDrinkQty('fn', -1)">-</button><input type="text" id="fn" value="0" readonly><button onclick="updateDrinkQty('fn', 1)">+</button></div></div>
+      <div class="item"><label>A&W</label><div class="quantity-control"><button onclick="updateDrinkQty('anw', -1)">-</button><input type="text" id="anw" value="0" readonly><button onclick="updateDrinkQty('anw', 1)">+</button></div></div>
+      <div class="item"><label>PEPSI</label><div class="quantity-control"><button onclick="updateDrinkQty('pepsi', -1)">-</button><input type="text" id="pepsi" value="0" readonly><button onclick="updateDrinkQty('pepsi', 1)">+</button></div></div>
+    </div>
+  </div>
+
+  <div class="total" id="totalDisplay">Total: RM0</div>
+  <button class="submit-btn" onclick="submitOrder()">Submit Order</button>
+
+  <script>
+    let addons = { cheese: 0, fishball: 0, seafood: 0, radish: 0 };
+    let drinks = { sprite: 0, coke: 0, fn: 0, anw: 0, pepsi: 0 };
+
+    function updateAddonQty(name, change) {
+      addons[name] = Math.max(0, addons[name] + change);
+      document.getElementById(name).value = addons[name];
+      updateTotal();
+    }
+
+    function updateDrinkQty(name, change) {
+      drinks[name] = Math.max(0, drinks[name] + change);
+      document.getElementById(name).value = drinks[name];
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let addonTotal = (addons.cheese + addons.fishball + addons.seafood + addons.radish) * 2;
+      let drinkTotal = (drinks.sprite + drinks.coke + drinks.fn + drinks.anw + drinks.pepsi) * 2.5;
+      let total = addonTotal + drinkTotal;
+      document.getElementById('totalDisplay').innerText = 'Total: RM' + total.toFixed(2);
+    }
+
+    function submitOrder() {
+      const orderData = { addons, drinks };
+      localStorage.setItem('odenOrder', JSON.stringify(orderData));
+      alert('Order submitted!');
+      window.location.href = 'orders.html';
+    }
+  </script>
 </body>
 </html>
