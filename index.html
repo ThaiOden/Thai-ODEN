@@ -23,9 +23,41 @@
       <button onclick="selectSet('Premium')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
     </div>
 
+    <!-- Set Contents Table -->
+    <div class="overflow-x-auto mb-8">
+      <h2 class="text-2xl font-bold text-orange-700 mb-4">What's Included in Each Set</h2>
+      <table class="min-w-full text-sm text-center border border-orange-300 bg-white rounded shadow">
+        <thead class="bg-orange-100 text-orange-800">
+          <tr>
+            <th class="p-2 border">Set</th>
+            <th class="p-2 border">Instant Noodle</th>
+            <th class="p-2 border">Fish Cake</th>
+            <th class="p-2 border">Fuchuk</th>
+            <th class="p-2 border">Crab Stick</th>
+            <th class="p-2 border">Fish Ball</th>
+            <th class="p-2 border">Seafood Tofu</th>
+            <th class="p-2 border">Enoki Mushroom</th>
+            <th class="p-2 border">Cheese Tofu</th>
+            <th class="p-2 border">Egg</th>
+            <th class="p-2 border">White Radish</th>
+            <th class="p-2 border">Price (RM)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="border p-1">A</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td><td></td><td></td><td></td><td>✓</td><td></td><td>6</td></tr>
+          <tr><td class="border p-1">B</td><td></td><td>✓</td><td>✓</td><td></td><td></td><td></td><td></td><td></td><td>✓</td><td>✓</td><td>6</td></tr>
+          <tr><td class="border p-1">C</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>8</td></tr>
+          <tr><td class="border p-1">D</td><td></td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>8</td></tr>
+          <tr><td class="border p-1">E</td><td>✓</td><td>✓</td><td></td><td></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>10</td></tr>
+          <tr><td class="border p-1">F</td><td></td><td></td><td></td><td>✓</td><td>✓</td><td></td><td></td><td>✓</td><td>✓</td><td>✓</td><td>10</td></tr>
+          <tr><td class="border p-1">Premium</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>15</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- Individual Food Selection -->
     <div class="mb-8">
-      <h2 class="text-2xl font-bold text-orange-700 mb-4">Individual Food Selection (RM2 each, White Radish unit: 2)</h2>
+      <h2 class="text-2xl font-bold text-orange-700 mb-4">Individual Food Selection (RM2 each)</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <template id="food-template">
           <div class="flex justify-between items-center bg-white p-3 rounded shadow">
