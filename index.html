@@ -13,14 +13,17 @@
     <h1 class="text-3xl font-bold text-center text-orange-700 mb-6">Oden Set Selection</h1>
 
     <!-- Set Selection -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <button onclick="selectSet('A', 6)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
-      <button onclick="selectSet('B', 6)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
-      <button onclick="selectSet('C', 8)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
-      <button onclick="selectSet('D', 8)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
-      <button onclick="selectSet('E', 10)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
-      <button onclick="selectSet('F', 10)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
-      <button onclick="selectSet('Premium', 15)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <button onclick="selectSet('A', 6, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
+      <button onclick="selectSet('B', 6, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
+      <button onclick="selectSet('C', 8, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
+      <button onclick="selectSet('D', 8, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
+      <button onclick="selectSet('E', 10, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
+      <button onclick="selectSet('F', 10, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
+      <button onclick="selectSet('Premium', 15, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
+    </div>
+    <div class="mb-6">
+      <button onclick="clearSetSelection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Clear Set Selection</button>
     </div>
 
     <!-- Set Contents Table -->
@@ -55,23 +58,138 @@
       </table>
     </div>
 
+    <!-- Food and Drink Selection -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-orange-700 mb-4">Additional Food & Drinks</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Food Items -->
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Food</h3>
+          <div id="food-items" class="space-y-2">
+            <!-- JS populates this -->
+          </div>
+        </div>
+
+        <!-- Drink Items -->
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Drinks</h3>
+          <div id="drink-items" class="space-y-2">
+            <!-- JS populates this -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Total Price Display -->
     <div class="text-right text-xl font-bold text-orange-700 mb-6">
       Total Price: RM<span id="totalPrice">0.00</span>
     </div>
 
-    <!-- JavaScript for Price Calculator -->
     <script>
       let selectedSetPrice = 0;
+      let activeButton = null;
+      let additionalItems = {};
 
-      function selectSet(setName, price) {
+      const foodItems = [
+        { name: 'Instant Noodle', price: 1 },
+        { name: 'Fish Cake', price: 1 },
+        { name: 'Fuchuk', price: 1 },
+        { name: 'Crab Stick', price: 1 },
+        { name: 'Fish Ball', price: 2 },
+        { name: 'Seafood Tofu', price: 2 },
+        { name: 'Enoki Mushroom', price: 1 },
+        { name: 'Cheese Tofu', price: 2 },
+        { name: 'Egg', price: 1 },
+        { name: 'White Radish', price: 1 },
+      ];
+
+      const drinkItems = [
+        { name: 'Sprite', price: 2.5 },
+        { name: 'Coca-Cola', price: 2.5 },
+        { name: 'F&N Soda', price: 2.5 },
+        { name: 'A&W', price: 2.5 },
+        { name: 'Pepsi', price: 2.5 },
+      ];
+
+      function createItemControls(containerId, items) {
+        const container = document.getElementById(containerId);
+        items.forEach(item => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'flex justify-between items-center bg-white p-2 rounded shadow';
+
+          const name = document.createElement('span');
+          name.textContent = `${item.name} (RM${item.price})`;
+
+          const controls = document.createElement('div');
+          controls.className = 'flex items-center space-x-2';
+
+          const minus = document.createElement('button');
+          minus.textContent = '-';
+          minus.className = 'bg-orange-400 text-white w-6 h-6 rounded';
+          const plus = document.createElement('button');
+          plus.textContent = '+';
+          plus.className = 'bg-orange-500 text-white w-6 h-6 rounded';
+
+          const count = document.createElement('span');
+          count.textContent = '0';
+
+          additionalItems[item.name] = 0;
+
+          minus.onclick = () => {
+            if (additionalItems[item.name] > 0) {
+              additionalItems[item.name]--;
+              count.textContent = additionalItems[item.name];
+              updateTotalPrice();
+            }
+          };
+          plus.onclick = () => {
+            additionalItems[item.name]++;
+            count.textContent = additionalItems[item.name];
+            updateTotalPrice();
+          };
+
+          controls.appendChild(minus);
+          controls.appendChild(count);
+          controls.appendChild(plus);
+
+          wrapper.appendChild(name);
+          wrapper.appendChild(controls);
+
+          container.appendChild(wrapper);
+        });
+      }
+
+      function selectSet(setName, price, button) {
         selectedSetPrice = price;
+        updateTotalPrice();
+
+        if (activeButton) {
+          activeButton.classList.remove('bg-orange-200');
+        }
+        button.classList.add('bg-orange-200');
+        activeButton = button;
+      }
+
+      function clearSetSelection() {
+        selectedSetPrice = 0;
+        if (activeButton) {
+          activeButton.classList.remove('bg-orange-200');
+          activeButton = null;
+        }
         updateTotalPrice();
       }
 
       function updateTotalPrice() {
-        document.getElementById("totalPrice").textContent = selectedSetPrice.toFixed(2);
+        let total = selectedSetPrice;
+        for (let item in additionalItems) {
+          const price = foodItems.concat(drinkItems).find(i => i.name === item).price;
+          total += price * additionalItems[item];
+        }
+        document.getElementById("totalPrice").textContent = total.toFixed(2);
       }
+
+      createItemControls('food-items', foodItems);
+      createItemControls('drink-items', drinkItems);
     </script>
   </div>
 </body>
