@@ -5,115 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Oden Order</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .set {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
-    }
-    .set button {
-      margin-top: 10px;
-    }
-    .total {
-      font-size: 1.5em;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .next-btn {
-      display: block;
-      margin: 0 auto;
-      padding: 10px 20px;
-      font-size: 1em;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 40px; }
+    .section { margin-bottom: 30px; }
+    .item { display: flex; align-items: center; justify-content: space-between; margin: 5px 0; }
+    .item button { width: 30px; height: 30px; }
+    .item span { margin: 0 10px; }
   </style>
 </head>
 <body>
-  <h1>Choose Your Oden Set</h1>
 
-  <div class="set">
-    <h3>Set A (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, White Tofu, White Radish, Fish Cake, Crab Stick</p>
-    <button onclick="selectSet('Set A', 9.90)">Select Set A</button>
+  <h1>Oden Set Order</h1>
+
+  <div class="section" id="set-section">
+    <h2>Select Oden Set</h2>
+    <select id="odenSet" onchange="updateTotal()">
+      <option value="">-- Choose a Set --</option>
+      <option value="Set A|6">Set A - RM6</option>
+      <option value="Set B|6">Set B - RM6</option>
+      <option value="Set C|8">Set C - RM8</option>
+      <option value="Set D|8">Set D - RM8</option>
+      <option value="Set E|10">Set E - RM10</option>
+      <option value="Set F|10">Set F - RM10</option>
+      <option value="Premium|15">Premium Set - RM15</option>
+    </select>
   </div>
 
-  <div class="set">
-    <h3>Set B (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, Fishball, Lobster Ball, Fish Cake, Crab Stick</p>
-    <button onclick="selectSet('Set B', 9.90)">Select Set B</button>
+  <div class="section" id="addon-section">
+    <h2>Add-On Items</h2>
+    <div id="addOns"></div>
   </div>
 
-  <div class="set">
-    <h3>Set C (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, White Tofu, White Radish, Fish Cake, Egg</p>
-    <button onclick="selectSet('Set C', 9.90)">Select Set C</button>
+  <div class="section" id="drinks-section">
+    <h2>Drinks</h2>
+    <div id="drinks"></div>
   </div>
 
-  <div class="set">
-    <h3>Set D (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, White Tofu, White Radish, Egg, Fish Ball</p>
-    <button onclick="selectSet('Set D', 9.90)">Select Set D</button>
+  <div class="section">
+    <h2>Phone Number</h2>
+    <input type="tel" id="phone" placeholder="e.g., 60123456789" />
   </div>
 
-  <div class="set">
-    <h3>Set E (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, Fish Ball, Lobster Ball, Fish Cake, Egg</p>
-    <button onclick="selectSet('Set E', 9.90)">Select Set E</button>
+  <div class="section">
+    <h2>Total: RM <span id="total">0.00</span></h2>
+    <button onclick="submitOrder()">Submit Order via WhatsApp</button>
   </div>
-
-  <div class="set">
-    <h3>Set F (5 pcs) - RM9.90</h3>
-    <p>Items: Cheese Tofu, White Tofu, Egg, Fish Cake, Crab Stick</p>
-    <button onclick="selectSet('Set F', 9.90)">Select Set F</button>
-  </div>
-
-  <div class="set">
-    <h3>Premium Set (5 pcs) - RM11.90</h3>
-    <p>Items: Cheese Tofu, Fish Roe Ball, Lobster Ball, White Radish, Egg</p>
-    <button onclick="selectSet('Premium Set', 11.90)">Select Premium Set</button>
-  </div>
-
-  <div class="total" id="totalPrice">Total: RM0.00</div>
-
-  <button class="next-btn" onclick="goToNextPage()">Next</button>
 
   <script>
-    let selectedSetPrice = 0;
+    const addOnItems = [
+      { name: 'Instant Noodle', price: 1 },
+      { name: 'Fish Cake', price: 1 },
+      { name: 'Fuchuk', price: 1 },
+      { name: 'Crab Stick', price: 1 },
+      { name: 'Fish Ball', price: 2 },
+      { name: 'Seafood Tofu', price: 2 },
+      { name: 'Enoki Mushroom', price: 1 },
+      { name: 'Cheese Tofu', price: 2 },
+      { name: 'Egg', price: 1 },
+      { name: 'White Radish', price: 1 },
+    ];
 
-    function selectSet(name, price) {
-      selectedSetPrice = price;
-      localStorage.setItem("selectedSet", name);
-      localStorage.setItem("selectedSetPrice", price);
+    const drinkItems = [
+      { name: 'SPRITE', price: 2.5 },
+      { name: 'COCA - COLA', price: 2.5 },
+      { name: 'F&N SODA', price: 2.5 },
+      { name: 'A&W', price: 2.5 },
+      { name: 'PEPSI', price: 2.5 },
+    ];
+
+    const quantities = {};
+    let setPrice = 0;
+
+    function createItemUI(items, containerId) {
+      const container = document.getElementById(containerId);
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <span>${item.name} (RM${item.price})</span>
+          <button onclick="changeQty('${item.name}', -1)">-</button>
+          <span id="${item.name}-qty">0</span>
+          <button onclick="changeQty('${item.name}', 1)">+</button>
+        `;
+        container.appendChild(div);
+        quantities[item.name] = 0;
+      });
+    }
+
+    function changeQty(item, delta) {
+      quantities[item] = Math.max(0, quantities[item] + delta);
+      document.getElementById(`${item}-qty`).textContent = quantities[item];
       updateTotal();
-      alert(name + ' selected.');
     }
 
     function updateTotal() {
-      document.getElementById("totalPrice").innerText = `Total: RM${selectedSetPrice.toFixed(2)}`;
+      const set = document.getElementById('odenSet').value;
+      setPrice = 0;
+      if (set) {
+        setPrice = parseFloat(set.split('|')[1]);
+      }
+
+      let addonTotal = 0;
+      [...addOnItems, ...drinkItems].forEach(item => {
+        addonTotal += quantities[item.name] * item.price;
+      });
+
+      const total = setPrice + addonTotal;
+      document.getElementById('total').textContent = total.toFixed(2);
     }
 
-    function goToNextPage() {
-      if (selectedSetPrice === 0) {
-        alert("Please select a set before proceeding.");
+    function submitOrder() {
+      const phone = document.getElementById('phone').value;
+      if (!phone) {
+        alert('Please enter your phone number!');
         return;
       }
-      window.location.href = "addons.html";
+
+      const set = document.getElementById('odenSet').value.split('|')[0] || 'None';
+      let message = `Order Details:\nSet: ${set}\n`;
+
+      const addons = Object.entries(quantities).filter(([_, qty]) => qty > 0);
+      if (addons.length > 0) {
+        message += `Add-ons:\n`;
+        addons.forEach(([name, qty]) => {
+          message += `- ${name}: ${qty}\n`;
+        });
+      }
+
+      const total = document.getElementById('total').textContent;
+      message += `Total: RM${total}`;
+
+      const encoded = encodeURIComponent(message);
+      const link = `https://wa.me/${phone}?text=${encoded}`;
+      window.open(link, '_blank');
     }
 
-    // Load any previously selected set when page reloads
-    window.addEventListener("DOMContentLoaded", () => {
-      const price = localStorage.getItem("selectedSetPrice");
-      if (price) {
-        selectedSetPrice = parseFloat(price);
-        updateTotal();
-      }
-    });
+    // Initialize UI
+    createItemUI(addOnItems, 'addOns');
+    createItemUI(drinkItems, 'drinks');
   </script>
+
 </body>
 </html>
