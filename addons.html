@@ -9,9 +9,13 @@
 <body class="bg-orange-50 font-sans">
   <div class="max-w-3xl mx-auto p-6">
     <h1 class="text-3xl font-bold text-orange-700 mb-6 text-center">Confirm Your Oden Order</h1>
-    <div id="order-summary" class="bg-white p-4 rounded shadow mb-6"></div>
 
-    <div class="text-center">
+    <div id="order-summary" class="bg-white p-4 rounded shadow mb-6 text-gray-800"></div>
+
+    <div class="flex justify-between">
+      <button onclick="goBack()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded shadow">
+        Back
+      </button>
       <button onclick="sendWhatsAppOrder()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow">
         Submit Order via WhatsApp
       </button>
@@ -20,11 +24,20 @@
 
   <script>
     const orderData = JSON.parse(localStorage.getItem('odenOrder'));
+
     const foodItems = [
       'Instant Noodle', 'Fish Cake', 'Fuchuk', 'Crab Stick', 'Fish Ball',
       'Seafood Tofu', 'Enoki Mushroom', 'Cheese Tofu', 'Egg', 'White Radish'
     ];
+
     const drinkItems = ['Sprite', 'Coca-Cola', 'F&N Soda', 'A&W', 'Pepsi'];
+
+    const prices = {
+      'Instant Noodle': 1, 'Fish Cake': 1, 'Fuchuk': 1, 'Crab Stick': 1,
+      'Fish Ball': 2, 'Seafood Tofu': 2, 'Enoki Mushroom': 1, 'Cheese Tofu': 2,
+      'Egg': 1, 'White Radish': 2,
+      'Sprite': 2.5, 'Coca-Cola': 2.5, 'F&N Soda': 2.5, 'A&W': 2.5, 'Pepsi': 2.5
+    };
 
     function renderOrderSummary() {
       if (!orderData) {
@@ -32,7 +45,7 @@
         return;
       }
 
-      let summaryHTML = `<h2 class="text-xl font-semibold mb-2">Selected Set: Set ${orderData.set} (RM${orderData.setPrice})</h2>`;
+      let summaryHTML = `<h2 class="text-xl font-semibold mb-4">Set Selected: Set ${orderData.set} (RM${orderData.setPrice})</h2>`;
 
       const items = orderData.items;
       const foodList = foodItems.filter(name => items[name] > 0);
@@ -41,7 +54,7 @@
       if (foodList.length) {
         summaryHTML += `<h3 class="text-lg font-semibold mt-4">Extra Food Items:</h3><ul class="list-disc list-inside">`;
         foodList.forEach(name => {
-          summaryHTML += `<li>${name} x${items[name]}</li>`;
+          summaryHTML += `<li>${name} x${items[name]} (RM${(prices[name] * items[name]).toFixed(2)})</li>`;
         });
         summaryHTML += `</ul>`;
       }
@@ -49,26 +62,19 @@
       if (drinkList.length) {
         summaryHTML += `<h3 class="text-lg font-semibold mt-4">Drinks:</h3><ul class="list-disc list-inside">`;
         drinkList.forEach(name => {
-          summaryHTML += `<li>${name} x${items[name]}</li>`;
+          summaryHTML += `<li>${name} x${items[name]} (RM${(prices[name] * items[name]).toFixed(2)})</li>`;
         });
         summaryHTML += `</ul>`;
       }
 
       const total = calculateTotal();
-      summaryHTML += `<div class="text-xl font-bold mt-4">Total: RM${total.toFixed(2)}</div>`;
+      summaryHTML += `<div class="text-xl font-bold mt-6">Total: RM${total.toFixed(2)}</div>`;
 
       document.getElementById("order-summary").innerHTML = summaryHTML;
     }
 
     function calculateTotal() {
       let total = orderData.setPrice;
-      const prices = {
-        'Instant Noodle': 1, 'Fish Cake': 1, 'Fuchuk': 1, 'Crab Stick': 1,
-        'Fish Ball': 2, 'Seafood Tofu': 2, 'Enoki Mushroom': 1, 'Cheese Tofu': 2,
-        'Egg': 1, 'White Radish': 2,
-        'Sprite': 2.5, 'Coca-Cola': 2.5, 'F&N Soda': 2.5, 'A&W': 2.5, 'Pepsi': 2.5
-      };
-
       for (let name in orderData.items) {
         total += prices[name] * orderData.items[name];
       }
@@ -76,18 +82,30 @@
     }
 
     function sendWhatsAppOrder() {
-      const phone = "601115701783";
+      const phone = "601115701783"; // WhatsApp format
       let message = `Oden Order:%0ASet: ${orderData.set} (RM${orderData.setPrice})`;
 
-      for (let name in orderData.items) {
-        if (orderData.items[name] > 0) {
-          message += `%0A${name}: ${orderData.items[name]}`;
-        }
+      const items = orderData.items;
+
+      const allItems = [...foodItems, ...drinkItems].filter(name => items[name] > 0);
+
+      if (allItems.length) {
+        message += `%0A%0AItems:`;
+        allItems.forEach(name => {
+          const qty = items[name];
+          const price = prices[name] * qty;
+          message += `%0A- ${name} x${qty} (RM${price.toFixed(2)})`;
+        });
       }
 
-      message += `%0ATotal: RM${calculateTotal().toFixed(2)}`;
+      message += `%0A%0ATotal: RM${calculateTotal().toFixed(2)}`;
+
       const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
       window.open(url, "_blank");
+    }
+
+    function goBack() {
+      window.location.href = "index.html";
     }
 
     renderOrderSummary();
