@@ -43,6 +43,7 @@
       padding: 1rem;
       width: 200px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
     }
     .item label {
       display: block;
@@ -54,29 +55,6 @@
       font-size: 0.9rem;
       color: #666;
     }
-    .quantity-control {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .quantity-control button {
-      width: 30px;
-      height: 30px;
-      font-size: 18px;
-      margin: 0 5px;
-      background-color: #d32f2f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .quantity-control input {
-      width: 40px;
-      text-align: center;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
     .order-btn, .next-btn {
       margin-top: 2rem;
       background: #d32f2f;
@@ -87,12 +65,25 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .drink-section {
-      padding: 2rem 1rem;
-      background: #fff;
+    .total {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
     }
-    .drink-section h2 {
-      margin-bottom: 1rem;
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .quantity-control button {
+      padding: 0.4rem 0.8rem;
+      font-size: 1rem;
+    }
+    .quantity-control input {
+      width: 40px;
+      text-align: center;
+      font-size: 1rem;
     }
   </style>
 </head>
@@ -137,5 +128,114 @@
   </section>
 
   <section class="menu">
-    <h2>Pick Additional Items</h2>
-    <!-- existing add-on content remains unchanged -->
+    <h2>Choose Individual Items</h2>
+    <div class="items">
+      <div class="item"><label>Instant Noodle (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('noodle', -1)">-</button><input type="text" id="noodle" value="0" readonly><button onclick="updateItemQty('noodle', 1)">+</button></div></div>
+      <div class="item"><label>Fish Cake (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('fishcake', -1)">-</button><input type="text" id="fishcake" value="0" readonly><button onclick="updateItemQty('fishcake', 1)">+</button></div></div>
+      <div class="item"><label>Fuchuk (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('fuchuk', -1)">-</button><input type="text" id="fuchuk" value="0" readonly><button onclick="updateItemQty('fuchuk', 1)">+</button></div></div>
+      <div class="item"><label>Crab Stick (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('crab', -1)">-</button><input type="text" id="crab" value="0" readonly><button onclick="updateItemQty('crab', 1)">+</button></div></div>
+      <div class="item"><label>Fish Ball (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('fishball', -1)">-</button><input type="text" id="fishball" value="0" readonly><button onclick="updateItemQty('fishball', 1)">+</button></div></div>
+      <div class="item"><label>Seafood Tofu (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('seafood', -1)">-</button><input type="text" id="seafood" value="0" readonly><button onclick="updateItemQty('seafood', 1)">+</button></div></div>
+      <div class="item"><label>Enoki Mushroom (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('enoki', -1)">-</button><input type="text" id="enoki" value="0" readonly><button onclick="updateItemQty('enoki', 1)">+</button></div></div>
+      <div class="item"><label>Cheese Tofu (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('cheese', -1)">-</button><input type="text" id="cheese" value="0" readonly><button onclick="updateItemQty('cheese', 1)">+</button></div></div>
+      <div class="item"><label>Egg (RM1)</label><div class="quantity-control"><button onclick="updateItemQty('egg', -1)">-</button><input type="text" id="egg" value="0" readonly><button onclick="updateItemQty('egg', 1)">+</button></div></div>
+      <div class="item"><label>White Radish (RM2)</label><div class="quantity-control"><button onclick="updateItemQty('radish', -1)">-</button><input type="text" id="radish" value="0" readonly><button onclick="updateItemQty('radish', 1)">+</button></div></div>
+    </div>
+  </section>
+
+  <section class="menu">
+    <h2>Select Your Drink</h2>
+    <div class="items">
+      <div class="item">
+        <label>SPRITE (RM2.5)</label>
+        <div class="quantity-control">
+          <button onclick="updateDrinkQty('sprite', -1)">-</button>
+          <input type="text" id="sprite" value="0" readonly />
+          <button onclick="updateDrinkQty('sprite', 1)">+</button>
+        </div>
+      </div>
+      <div class="item">
+        <label>COCA-COLA (RM2.5)</label>
+        <div class="quantity-control">
+          <button onclick="updateDrinkQty('coke', -1)">-</button>
+          <input type="text" id="coke" value="0" readonly />
+          <button onclick="updateDrinkQty('coke', 1)">+</button>
+        </div>
+      </div>
+      <div class="item">
+        <label>F&N SODA (RM2.5)</label>
+        <div class="quantity-control">
+          <button onclick="updateDrinkQty('fn', -1)">-</button>
+          <input type="text" id="fn" value="0" readonly />
+          <button onclick="updateDrinkQty('fn', 1)">+</button>
+        </div>
+      </div>
+      <div class="item">
+        <label>A&W (RM2.5)</label>
+        <div class="quantity-control">
+          <button onclick="updateDrinkQty('anw', -1)">-</button>
+          <input type="text" id="anw" value="0" readonly />
+          <button onclick="updateDrinkQty('anw', 1)">+</button>
+        </div>
+      </div>
+      <div class="item">
+        <label>PEPSI (RM2.5)</label>
+        <div class="quantity-control">
+          <button onclick="updateDrinkQty('pepsi', -1)">-</button>
+          <input type="text" id="pepsi" value="0" readonly />
+          <button onclick="updateDrinkQty('pepsi', 1)">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="menu">
+    <div class="total" id="totalDisplay">Total: RM0</div>
+    <button class="next-btn" onclick="goToNextPage()">Next</button>
+  </div>
+
+  <script>
+    let selectedSetPrice = 0;
+    let drinks = { sprite: 0, coke: 0, fn: 0, anw: 0, pepsi: 0 };
+    let items = {
+      noodle: 0, fishcake: 0, fuchuk: 0, crab: 0,
+      fishball: 0, seafood: 0, enoki: 0, cheese: 0, egg: 0, radish: 0
+    };
+
+    function selectSet(name, price) {
+      selectedSetPrice = price;
+      updateTotal();
+      alert(name + ' selected.');
+    }
+
+    function updateDrinkQty(drink, change) {
+      drinks[drink] = Math.max(0, drinks[drink] + change);
+      document.getElementById(drink).value = drinks[drink];
+      updateTotal();
+    }
+
+    function updateItemQty(item, change) {
+      items[item] = Math.max(0, items[item] + change);
+      document.getElementById(item).value = items[item];
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const drinkTotal = (
+        drinks.sprite + drinks.coke + drinks.fn + drinks.anw + drinks.pepsi
+      ) * 2.5;
+      const itemTotal =
+        (items.noodle + items.fishcake + items.fuchuk + items.crab +
+         items.enoki + items.egg) * 1 +
+        (items.fishball + items.seafood + items.cheese) * 2 +
+        items.radish * 2;
+      const total = selectedSetPrice + drinkTotal + itemTotal;
+      document.getElementById('totalDisplay').innerText = 'Total: RM' + total.toFixed(2);
+    }
+
+    function goToNextPage() {
+      window.location.href = 'addons.html';
+    }
+  </script>
+</body>
+</html>
