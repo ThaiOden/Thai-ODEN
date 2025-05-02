@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order Oden - Starting From RM6</title>
+  <title>Oden Set Order</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -18,57 +18,65 @@
       padding: 2rem 1rem;
       background: #ffe6cc;
     }
+    header img {
+      max-width: 200px;
+    }
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
     }
-    .price {
-      font-size: 1.5rem;
-      color: #d32f2f;
-    }
-    .sets, .menu {
+    .sets {
       padding: 2rem 1rem;
       text-align: center;
     }
-    .sets-container, .items {
+    .sets h2 {
+      margin-bottom: 1rem;
+    }
+    .items {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
     }
-    .set, .item {
+    .item {
       background: #fff;
-      padding: 1rem;
       border-radius: 12px;
+      padding: 1rem;
+      width: 220px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      width: 200px;
       cursor: pointer;
-    }
-    .set:hover {
-      background-color: #fff1e6;
     }
     .item label {
       font-weight: bold;
+      font-size: 1.1rem;
       display: block;
-      margin: 0.5rem 0;
+      margin-bottom: 0.3rem;
     }
-    .quantity-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
+    .item p {
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
     }
-    .quantity-controls button {
-      width: 30px;
-      height: 30px;
-      font-size: 1.2rem;
+    .item div {
+      margin-top: 0.5rem;
+    }
+    .item button {
       background: #d32f2f;
       color: white;
       border: none;
-      border-radius: 50%;
+      padding: 0.3rem 0.6rem;
+      margin: 0 0.3rem;
+      font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .order-btn {
+    .total {
+      text-align: center;
       margin-top: 2rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .order-btn {
+      display: block;
+      margin: 2rem auto;
       background: #d32f2f;
       color: white;
       padding: 1rem 2rem;
@@ -77,207 +85,156 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .total-price {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    footer {
-      background: #d32f2f;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Delicious Oden Bowls</h1>
-  <p class="price">Starting from RM6</p>
-  <p><a href="https://www.instagram.com/thai_oden/" target="_blank">Follow us: <strong>THAI_ODEN</strong></a></p>
+  <h1>Order Your Oden Set</h1>
 </header>
 
 <section class="sets">
-  <h2>Oden Sets</h2>
-  <div class="sets-container">
-    <div class="set" onclick="selectSet(['Fish Ball','Seafood Tofu','Cheese Tofu'], [1,1,1])">
-      <h3>Set A</h3><p>Fish Ball, Seafood Tofu, Cheese Tofu<br><strong>RM6</strong></p>
+  <h2>Select a Set</h2>
+  <div class="items">
+    <div class="item" onclick="changeSetQuantity('Set A', 1)">
+      <label>Set A</label>
+      <p>Instant Noodle, Fish Cake, Egg, White Radish</p>
+      <p>RM6</p>
+      <div>
+        <button onclick="changeSetQuantity('Set A', -1); event.stopPropagation()">−</button>
+        <span id="Set A-count">0</span>
+        <button onclick="changeSetQuantity('Set A', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['Instant Noodle','Fish Cake','Egg','Fuchuk'], [1,1,1,1])">
-      <h3>Set B</h3><p>Instant Noodle, Fish Cake, Egg, Fuchuk<br><strong>RM5</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Set B', 1)">
+      <label>Set B</label>
+      <p>Instant Noodle, Fish Ball, Cheese Tofu, Fuchuk</p>
+      <p>RM6</p>
+      <div>
+        <button onclick="changeSetQuantity('Set B', -1); event.stopPropagation()">−</button>
+        <span id="Set B-count">0</span>
+        <button onclick="changeSetQuantity('Set B', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['Fish Ball','Cheese Tofu','Enoki Mushroom'], [1,1,1])">
-      <h3>Set C</h3><p>Fish Ball, Cheese Tofu, Enoki Mushroom<br><strong>RM5</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Set C', 1)">
+      <label>Set C</label>
+      <p>Instant Noodle, Crab Stick, Egg, Enoki Mushroom</p>
+      <p>RM8</p>
+      <div>
+        <button onclick="changeSetQuantity('Set C', -1); event.stopPropagation()">−</button>
+        <span id="Set C-count">0</span>
+        <button onclick="changeSetQuantity('Set C', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['Seafood Tofu','Crab Stick','Egg'], [1,1,1])">
-      <h3>Set D</h3><p>Seafood Tofu, Crab Stick, Egg<br><strong>RM4</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Set D', 1)">
+      <label>Set D</label>
+      <p>Fish Ball, Fish Cake, White Radish, Enoki Mushroom</p>
+      <p>RM8</p>
+      <div>
+        <button onclick="changeSetQuantity('Set D', -1); event.stopPropagation()">−</button>
+        <span id="Set D-count">0</span>
+        <button onclick="changeSetQuantity('Set D', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['Fish Cake','Fuchuk','White Radish'], [1,1,1])">
-      <h3>Set E</h3><p>Fish Cake, Fuchuk, White Radish<br><strong>RM4</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Set E', 1)">
+      <label>Set E</label>
+      <p>Cheese Tofu, Crab Stick, Egg, Fuchuk</p>
+      <p>RM10</p>
+      <div>
+        <button onclick="changeSetQuantity('Set E', -1); event.stopPropagation()">−</button>
+        <span id="Set E-count">0</span>
+        <button onclick="changeSetQuantity('Set E', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['Instant Noodle','Crab Stick','Egg'], [1,1,1])">
-      <h3>Set F</h3><p>Instant Noodle, Crab Stick, Egg<br><strong>RM4</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Set F', 1)">
+      <label>Set F</label>
+      <p>Instant Noodle, Seafood Tofu, Egg, Enoki Mushroom</p>
+      <p>RM10</p>
+      <div>
+        <button onclick="changeSetQuantity('Set F', -1); event.stopPropagation()">−</button>
+        <span id="Set F-count">0</span>
+        <button onclick="changeSetQuantity('Set F', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
-    <div class="set" onclick="selectSet(['White Radish','Enoki Mushroom','Fuchuk'], [1,1,1])">
-      <h3>Set G</h3><p>White Radish, Enoki Mushroom, Fuchuk<br><strong>RM4</strong></p>
-    </div>
-    <div class="set" onclick="selectSet(['Fish Ball','Fish Cake','Seafood Tofu'], [1,1,1])">
-      <h3>Set H</h3><p>Fish Ball, Fish Cake, Seafood Tofu<br><strong>RM5</strong></p>
-    </div>
-    <div class="set" onclick="selectSet(['Cheese Tofu','White Radish','Crab Stick'], [1,1,1])">
-      <h3>Set I</h3><p>Cheese Tofu, White Radish, Crab Stick<br><strong>RM5</strong></p>
+
+    <div class="item" onclick="changeSetQuantity('Premium Set', 1)">
+      <label>Premium Set</label>
+      <p>Instant Noodle, Fish Ball, Cheese Tofu, Crab Stick, Enoki Mushroom, Egg</p>
+      <p>RM15</p>
+      <div>
+        <button onclick="changeSetQuantity('Premium Set', -1); event.stopPropagation()">−</button>
+        <span id="Premium Set-count">0</span>
+        <button onclick="changeSetQuantity('Premium Set', 1); event.stopPropagation()">+</button>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="menu">
-  <h2>Build Your Bowl</h2>
-  <form id="orderForm">
-    <div class="items">
-      <!-- 10 items -->
-      <div class="item"><label>Instant Noodle (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Instant Noodle', -1)">-</button>
-          <input type="number" id="Instant Noodle" name="Instant Noodle" value="0" readonly>
-          <button type="button" onclick="adjustQty('Instant Noodle', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Fish Cake (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Fish Cake', -1)">-</button>
-          <input type="number" id="Fish Cake" name="Fish Cake" value="0" readonly>
-          <button type="button" onclick="adjustQty('Fish Cake', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Crab Stick (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Crab Stick', -1)">-</button>
-          <input type="number" id="Crab Stick" name="Crab Stick" value="0" readonly>
-          <button type="button" onclick="adjustQty('Crab Stick', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Fish Ball (RM2)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Fish Ball', -1)">-</button>
-          <input type="number" id="Fish Ball" name="Fish Ball" value="0" readonly>
-          <button type="button" onclick="adjustQty('Fish Ball', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Seafood Tofu (RM2)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Seafood Tofu', -1)">-</button>
-          <input type="number" id="Seafood Tofu" name="Seafood Tofu" value="0" readonly>
-          <button type="button" onclick="adjustQty('Seafood Tofu', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Cheese Tofu (RM2)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Cheese Tofu', -1)">-</button>
-          <input type="number" id="Cheese Tofu" name="Cheese Tofu" value="0" readonly>
-          <button type="button" onclick="adjustQty('Cheese Tofu', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Egg (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Egg', -1)">-</button>
-          <input type="number" id="Egg" name="Egg" value="0" readonly>
-          <button type="button" onclick="adjustQty('Egg', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>White Radish (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('White Radish', -1)">-</button>
-          <input type="number" id="White Radish" name="White Radish" value="0" readonly>
-          <button type="button" onclick="adjustQty('White Radish', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Enoki Mushroom (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Enoki Mushroom', -1)">-</button>
-          <input type="number" id="Enoki Mushroom" name="Enoki Mushroom" value="0" readonly>
-          <button type="button" onclick="adjustQty('Enoki Mushroom', 1)">+</button>
-        </div>
-      </div>
-      <div class="item"><label>Fuchuk (RM1)</label>
-        <div class="quantity-controls">
-          <button type="button" onclick="adjustQty('Fuchuk', -1)">-</button>
-          <input type="number" id="Fuchuk" name="Fuchuk" value="0" readonly>
-          <button type="button" onclick="adjustQty('Fuchuk', 1)">+</button>
-        </div>
-      </div>
-    </div>
-
-    <p class="total-price">Total: RM <span id="totalPrice">0.00</span></p>
-    <button type="button" class="order-btn" onclick="submitOrder()">Order via WhatsApp</button>
-  </form>
-</section>
-
-<footer>
-  &copy; 2025 Oden. All rights reserved.
-</footer>
+<p class="total" id="total-price">Total: RM0</p>
+<button class="order-btn" onclick="submitOrder()">Order via WhatsApp</button>
 
 <script>
-  const prices = {
-    "Instant Noodle": 1,
-    "Fish Cake": 1,
-    "Crab Stick": 1,
-    "Fish Ball": 2,
-    "Seafood Tofu": 2,
-    "Cheese Tofu": 2,
-    "Egg": 1,
-    "White Radish": 1,
-    "Enoki Mushroom": 1,
-    "Fuchuk": 1
+  const setPrices = {
+    'Set A': 6,
+    'Set B': 6,
+    'Set C': 8,
+    'Set D': 8,
+    'Set E': 10,
+    'Set F': 10,
+    'Premium Set': 15
   };
 
-  function adjustQty(item, delta) {
-    const input = document.getElementById(item);
-    let value = parseInt(input.value);
-    value = Math.max(0, value + delta);
-    input.value = value;
-    calculateTotal();
+  const setCounts = {
+    'Set A': 0,
+    'Set B': 0,
+    'Set C': 0,
+    'Set D': 0,
+    'Set E': 0,
+    'Set F': 0,
+    'Premium Set': 0
+  };
+
+  function changeSetQuantity(setName, delta) {
+    setCounts[setName] = Math.max(0, setCounts[setName] + delta);
+    document.getElementById(`${setName}-count`).innerText = setCounts[setName];
+    updateTotalPrice();
   }
 
-  function calculateTotal() {
+  function updateTotalPrice() {
     let total = 0;
-    for (const item in prices) {
-      const qty = parseInt(document.getElementById(item)?.value || 0);
-      total += qty * prices[item];
+    for (const set in setCounts) {
+      total += setCounts[set] * setPrices[set];
     }
-    document.getElementById('totalPrice').textContent = total.toFixed(2);
-  }
-
-  function selectSet(items, quantities) {
-    items.forEach((item, i) => {
-      const input = document.getElementById(item);
-      if (input) {
-        input.value = quantities[i];
-      }
-    });
-    calculateTotal();
+    document.getElementById("total-price").innerText = "Total: RM" + total;
   }
 
   function submitOrder() {
-    const inputs = document.querySelectorAll('input[type="number"]');
     let message = 'Hi, I would like to order:\n';
-    let hasItems = false;
+    let empty = true;
 
-    inputs.forEach(input => {
-      const qty = parseInt(input.value);
-      if (qty > 0) {
-        message += `- ${input.name}: ${qty}\n`;
-        hasItems = true;
+    for (const set in setCounts) {
+      if (setCounts[set] > 0) {
+        message += `- ${set}: ${setCounts[set]}\n`;
+        empty = false;
       }
-    });
+    }
 
-    if (!hasItems) {
-      alert('Please select at least one item.');
+    if (empty) {
+      alert("Please select at least one set.");
       return;
     }
 
-    const total = document.getElementById('totalPrice').textContent;
-    message += `Total Price: RM ${total}`;
+    let total = 0;
+    for (const set in setCounts) {
+      total += setCounts[set] * setPrices[set];
+    }
+    message += `Total: RM${total}`;
+
     const encodedMessage = encodeURIComponent(message);
     const phoneNumber = '601115701783';
     const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
