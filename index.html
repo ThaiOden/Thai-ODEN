@@ -1,225 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oden Ordering</title>
+  <meta charset="UTF-8">
+  <title>Oden Order</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-orange-50 font-sans">
-  <div class="max-w-5xl mx-auto p-6">
-    <h1 class="text-3xl font-bold text-center text-orange-700 mb-6">Oden Set Selection</h1>
+<body class="bg-white text-gray-800 p-6">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold text-orange-700 mb-4">Oden Ordering</h1>
 
-    <!-- Customer Name -->
-    <div class="mb-6">
-      <label class="block text-orange-700 font-semibold mb-2" for="customerName">Your Name</label>
-      <input type="text" id="customerName" class="w-full p-2 border border-orange-300 rounded shadow" placeholder="Enter your name" />
-    </div>
+    <label for="name" class="block mb-1 font-semibold">Your Name <span class="text-red-500">*</span></label>
+    <input id="name" type="text" class="w-full mb-4 border border-gray-300 rounded p-2" placeholder="Enter your name" required>
 
     <!-- Set Selection -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-      <button onclick="selectSet('A', 6, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
-      <button onclick="selectSet('B', 6, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
-      <button onclick="selectSet('C', 8, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
-      <button onclick="selectSet('D', 8, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
-      <button onclick="selectSet('E', 10, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
-      <button onclick="selectSet('F', 10, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
-      <button onclick="selectSet('Premium', 15, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
-    </div>
-    <div class="mb-6">
-      <button onclick="clearSetSelection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Clear Set Selection</button>
+    <h2 class="text-xl font-semibold text-orange-700 mb-2">Choose a Set (Optional)</h2>
+    <div class="grid grid-cols-4 gap-2 mb-4">
+      <button onclick="selectSet('A', 6, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set A (RM6)</button>
+      <button onclick="selectSet('B', 6, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set B (RM6)</button>
+      <button onclick="selectSet('C', 8, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set C (RM8)</button>
+      <button onclick="selectSet('D', 8, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set D (RM8)</button>
+      <button onclick="selectSet('E', 10, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set E (RM10)</button>
+      <button onclick="selectSet('F', 10, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded">Set F (RM10)</button>
+      <button onclick="selectSet('Premium', 15, this)" class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded col-span-2">Premium Set (RM15)</button>
     </div>
 
-    <!-- Food and Drink Selection -->
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-orange-700 mb-4">Additional Food & Drinks</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Food Items -->
-        <div>
-          <h3 class="text-xl font-semibold mb-2">Food</h3>
-          <div id="food-items" class="space-y-2"></div>
-        </div>
+    <div id="set-description" class="mt-4 text-md text-orange-700 mb-4"></div>
 
-        <!-- Drink Items -->
-        <div>
-          <h3 class="text-xl font-semibold mb-2">Drinks</h3>
-          <div id="drink-items" class="space-y-2"></div>
-        </div>
-      </div>
-    </div>
+    <!-- Food Selection -->
+    <h2 class="text-xl font-semibold text-orange-700 mb-2">Select Additional Food Items (RM2 Each, White Radish = 2 pieces)</h2>
+    <div id="foodItems" class="grid grid-cols-2 gap-2 mb-4"></div>
 
-    <!-- Total Price Display -->
-    <div class="text-right text-xl font-bold text-orange-700 mb-6">
-      Total Price: RM<span id="totalPrice">0.00</span>
-    </div>
+    <!-- Drink Selection -->
+    <h2 class="text-xl font-semibold text-orange-700 mb-2">Select Drinks (RM3 Each)</h2>
+    <div id="drinkItems" class="grid grid-cols-2 gap-2 mb-4"></div>
 
-    <!-- Submit Button -->
-    <div class="text-right mt-6">
-      <button onclick="submitOrder()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow">
-        Submit Order via WhatsApp
-      </button>
-    </div>
+    <div class="text-lg font-semibold text-orange-700 mb-4">Total: RM <span id="total">0</span></div>
 
-    <!-- Clear All Selections -->
-    <div class="text-right mt-4">
-      <button onclick="clearAllSelections()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded shadow">
-        Clear All Selections
-      </button>
-    </div>
-
-    <script>
-      let selectedSet = null;
-      let selectedSetPrice = 0;
-      let activeButton = null;
-      let additionalItems = {};
-
-      const foodItems = [
-        { name: 'Instant Noodle', price: 1 },
-        { name: 'Fish Cake', price: 1 },
-        { name: 'Fuchuk', price: 1 },
-        { name: 'Crab Stick', price: 1 },
-        { name: 'Fish Ball', price: 2 },
-        { name: 'Seafood Tofu', price: 2 },
-        { name: 'Enoki Mushroom', price: 1 },
-        { name: 'Cheese Tofu', price: 2 },
-        { name: 'Egg', price: 1 },
-        { name: 'White Radish', price: 2 },
-      ];
-
-      const drinkItems = [
-        { name: 'Sprite', price: 3 },
-        { name: 'Coca-Cola', price: 3 },
-        { name: 'F&N Soda', price: 3 },
-        { name: 'A&W', price: 3 },
-        { name: 'Pepsi', price: 3 },
-      ];
-
-      function createItemControls(containerId, items) {
-        const container = document.getElementById(containerId);
-        items.forEach(item => {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'flex justify-between items-center bg-white p-2 rounded shadow';
-
-          const name = document.createElement('span');
-          name.textContent = item.name === 'White Radish'
-            ? `${item.name} (RM${item.price} for 2 pcs)`
-            : `${item.name} (RM${item.price})`;
-
-          const controls = document.createElement('div');
-          controls.className = 'flex items-center space-x-2';
-
-          const minus = document.createElement('button');
-          minus.textContent = '-';
-          minus.className = 'bg-orange-400 text-white w-6 h-6 rounded';
-          const plus = document.createElement('button');
-          plus.textContent = '+';
-          plus.className = 'bg-orange-500 text-white w-6 h-6 rounded';
-
-          const count = document.createElement('span');
-          count.textContent = '0';
-
-          additionalItems[item.name] = 0;
-
-          minus.onclick = () => {
-            if (additionalItems[item.name] > 0) {
-              additionalItems[item.name]--;
-              count.textContent = additionalItems[item.name];
-              updateTotalPrice();
-            }
-          };
-          plus.onclick = () => {
-            additionalItems[item.name]++;
-            count.textContent = additionalItems[item.name];
-            updateTotalPrice();
-          };
-
-          controls.appendChild(minus);
-          controls.appendChild(count);
-          controls.appendChild(plus);
-
-          wrapper.appendChild(name);
-          wrapper.appendChild(controls);
-          container.appendChild(wrapper);
-        });
-      }
-
-      function selectSet(setName, price, button) {
-        selectedSet = setName;
-        selectedSetPrice = price;
-        updateTotalPrice();
-
-        if (activeButton) {
-          activeButton.classList.remove('bg-orange-200');
-        }
-        button.classList.add('bg-orange-200');
-        activeButton = button;
-      }
-
-      function clearSetSelection() {
-        selectedSet = null;
-        selectedSetPrice = 0;
-        if (activeButton) {
-          activeButton.classList.remove('bg-orange-200');
-          activeButton = null;
-        }
-        updateTotalPrice();
-      }
-
-      function clearAllSelections() {
-        clearSetSelection();
-        for (let item in additionalItems) {
-          additionalItems[item] = 0;
-        }
-        document.querySelectorAll('#food-items span, #drink-items span').forEach(span => {
-          if (!isNaN(parseInt(span.textContent))) span.textContent = '0';
-        });
-        updateTotalPrice();
-      }
-
-      function updateTotalPrice() {
-        let total = selectedSetPrice;
-        for (let item in additionalItems) {
-          const price = [...foodItems, ...drinkItems].find(i => i.name === item).price;
-          total += price * additionalItems[item];
-        }
-        document.getElementById("totalPrice").textContent = total.toFixed(2);
-      }
-
-      function submitOrder() {
-        const name = document.getElementById("customerName").value.trim();
-        if (!name) {
-          alert("Please enter your name.");
-          return;
-        }
-
-        let message = `Hi, I'd like to order:\n\nName: ${name}\n`;
-
-        if (selectedSet) {
-          message += `Set: ${selectedSet} (RM${selectedSetPrice})\n`;
-        }
-
-        message += `\nExtras:\n`;
-        let hasExtras = false;
-        for (let item in additionalItems) {
-          if (additionalItems[item] > 0) {
-            message += `- ${item}: ${additionalItems[item]}\n`;
-            hasExtras = true;
-          }
-        }
-
-        if (!selectedSet && !hasExtras) {
-          alert("Please select at least a set or an extra item.");
-          return;
-        }
-
-        message += `\nTotal Price: RM${document.getElementById("totalPrice").textContent}`;
-        const encodedMessage = encodeURIComponent(message);
-        window.open(`https://wa.me/601115701783?text=${encodedMessage}`, '_blank');
-      }
-
-      createItemControls('food-items', foodItems);
-      createItemControls('drink-items', drinkItems);
-    </script>
+    <button onclick="submitOrder()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded">Submit via WhatsApp</button>
   </div>
+
+  <script>
+    let selectedSet = null;
+    let selectedSetPrice = 0;
+    let activeButton = null;
+    const foodItems = [
+      'Cheese tofu',
+      'Fish ball',
+      'Fish cake',
+      'Seafood tofu',
+      'Fuchuk',
+      'Crab stick',
+      'Instant noodle',
+      'Enoki mushroom',
+      'Egg',
+      'White radish'
+    ];
+    const drinkItems = ['Sprite', 'Coca-Cola', 'F&N Soda', 'A&W', 'Pepsi'];
+    const foodCounts = {};
+    const drinkCounts = {};
+
+    function createItemElements(items, containerId, countsObj, pricePerItem) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      items.forEach(item => {
+        countsObj[item] = 0;
+        const itemEl = document.createElement("div");
+        itemEl.className = "flex justify-between items-center border border-gray-300 rounded px-3 py-2";
+
+        const label = document.createElement("span");
+        label.textContent = item;
+
+        const controls = document.createElement("div");
+        controls.className = "flex items-center gap-2";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.textContent = "-";
+        minusBtn.className = "bg-red-500 text-white w-6 h-6 rounded";
+        minusBtn.onclick = () => {
+          if (countsObj[item] > 0) {
+            countsObj[item]--;
+            countEl.textContent = countsObj[item];
+            updateTotalPrice();
+          }
+        };
+
+        const countEl = document.createElement("span");
+        countEl.textContent = "0";
+
+        const plusBtn = document.createElement("button");
+        plusBtn.textContent = "+";
+        plusBtn.className = "bg-green-500 text-white w-6 h-6 rounded";
+        plusBtn.onclick = () => {
+          countsObj[item]++;
+          countEl.textContent = countsObj[item];
+          updateTotalPrice();
+        };
+
+        controls.append(minusBtn, countEl, plusBtn);
+        itemEl.append(label, controls);
+        container.appendChild(itemEl);
+      });
+    }
+
+    function updateTotalPrice() {
+      let foodTotal = 0;
+      for (const [item, count] of Object.entries(foodCounts)) {
+        const multiplier = item === 'White radish' ? 2 : 1;
+        foodTotal += count * multiplier * 2;
+      }
+      let drinkTotal = 0;
+      for (const count of Object.values(drinkCounts)) {
+        drinkTotal += count * 3;
+      }
+      const total = selectedSetPrice + foodTotal + drinkTotal;
+      document.getElementById("total").textContent = total;
+    }
+
+    function selectSet(setName, price, button) {
+      selectedSet = setName;
+      selectedSetPrice = price;
+      updateTotalPrice();
+
+      if (activeButton) {
+        activeButton.classList.remove('bg-orange-200');
+      }
+      button.classList.add('bg-orange-200');
+      activeButton = button;
+
+      const setDescriptions = {
+        A: ['Instant noodle', 'Fish cake', 'Crab stick', 'Egg'],
+        B: ['Instant noodle', 'Fish cake', 'Fuchuk', 'White radish', 'Egg'],
+        C: ['Fish cake', 'Fuchuk', 'Fish ball', 'White radish', 'Egg'],
+        D: ['Fuchuk', 'Fish ball', 'Enoki mushroom', 'Cheese tofu', 'Egg'],
+        E: ['Instant noodle', 'Fish ball', 'Seafood tofu', 'Enoki mushroom', 'Cheese tofu', 'Egg', 'White radish'],
+        F: ['Fish cake', 'Fuchuk', 'Seafood tofu', 'Enoki mushroom', 'Cheese tofu', 'Egg', 'White radish'],
+        Premium: ['Instant noodle', 'Fish cake', 'Fuchuk', 'Crab stick', 'Fish ball', 'Seafood tofu', 'Enoki mushroom', 'Cheese tofu', 'Egg', 'White radish']
+      };
+
+      const descriptionContainer = document.getElementById("set-description");
+      const items = setDescriptions[setName] || [];
+      descriptionContainer.innerHTML = `<p><strong>${setName} Set includes:</strong><br>✅ ${items.join('<br>✅ ')}</p>`;
+    }
+
+    function submitOrder() {
+      const name = document.getElementById("name").value.trim();
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      let message = `Oden Order from ${name}\n`;
+
+      if (selectedSet) {
+        message += `Set: ${selectedSet} (RM${selectedSetPrice})\n`;
+      }
+
+      const foodList = Object.entries(foodCounts)
+        .filter(([_, count]) => count > 0)
+        .map(([item, count]) => `${item} x${count}`)
+        .join(", ");
+      if (foodList) message += `Food: ${foodList}\n`;
+
+      const drinkList = Object.entries(drinkCounts)
+        .filter(([_, count]) => count > 0)
+        .map(([item, count]) => `${item} x${count}`)
+        .join(", ");
+      if (drinkList) message += `Drinks: ${drinkList}\n`;
+
+      const total = document.getElementById("total").textContent;
+      message += `Total: RM${total}`;
+
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/601115701783?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    createItemElements(foodItems, "foodItems", foodCounts, 2);
+    createItemElements(drinkItems, "drinkItems", drinkCounts, 3);
+  </script>
 </body>
 </html>
