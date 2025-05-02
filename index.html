@@ -14,13 +14,13 @@
 
     <!-- Set Selection -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <button onclick="selectSet('A')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
-      <button onclick="selectSet('B')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
-      <button onclick="selectSet('C')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
-      <button onclick="selectSet('D')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
-      <button onclick="selectSet('E')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
-      <button onclick="selectSet('F')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
-      <button onclick="selectSet('Premium')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
+      <button onclick="selectSet('A', 6)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
+      <button onclick="selectSet('B', 6)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
+      <button onclick="selectSet('C', 8)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
+      <button onclick="selectSet('D', 8)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
+      <button onclick="selectSet('E', 10)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
+      <button onclick="selectSet('F', 10)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
+      <button onclick="selectSet('Premium', 15)" class="bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
     </div>
 
     <!-- Set Contents Table -->
@@ -55,118 +55,25 @@
       </table>
     </div>
 
-    <!-- Individual Food Selection -->
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-orange-700 mb-4">Individual Food Selection (RM2 each)</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <template id="food-template">
-          <div class="flex justify-between items-center bg-white p-3 rounded shadow">
-            <span class="font-medium"></span>
-            <div class="flex items-center space-x-2">
-              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, -1)">-</button>
-              <input type="number" class="w-12 text-center border rounded" value="0" min="0">
-              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, 1)">+</button>
-            </div>
-          </div>
-        </template>
-      </div>
+    <!-- Total Price Display -->
+    <div class="text-right text-xl font-bold text-orange-700 mb-6">
+      Total Price: RM<span id="totalPrice">0.00</span>
     </div>
 
-    <!-- Drink Selection -->
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-orange-700 mb-4">Drink Selection (RM3 each)</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <template id="drink-template">
-          <div class="flex justify-between items-center bg-white p-3 rounded shadow">
-            <span class="font-medium"></span>
-            <div class="flex items-center space-x-2">
-              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, -1)">-</button>
-              <input type="number" class="w-12 text-center border rounded" value="0" min="0">
-              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, 1)">+</button>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
+    <!-- JavaScript for Price Calculator -->
+    <script>
+      let selectedSetPrice = 0;
 
-    <!-- Next Button -->
-    <div class="text-center">
-      <button onclick="goToAddOnPage()" class="px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700">Next</button>
-    </div>
-  </div>
-
-  <script>
-    let selectedSet = '';
-
-    function selectSet(set) {
-      selectedSet = set;
-      alert(`You selected Set ${set}`);
-    }
-
-    function changeQty(button, delta) {
-      const input = button.parentElement.querySelector('input');
-      let value = parseInt(input.value) || 0;
-      value = Math.max(0, value + delta);
-      input.value = value;
-    }
-
-    function goToAddOnPage() {
-      if (!selectedSet) {
-        alert('Please select a set before continuing.');
-        return;
+      function selectSet(setName, price) {
+        selectedSetPrice = price;
+        updateTotalPrice();
       }
 
-      const foodItems = ["Instant Noodle", "Fish Cake", "Fuchuk", "Crab Stick", "Fish Ball", "Seafood Tofu", "Enoki Mushroom", "Cheese Tofu", "Egg", "White Radish"];
-      const drinks = ["Sprite", "Coca-Cola", "F&N Soda", "A&W", "Pepsi"];
-      const selections = {
-        set: selectedSet,
-        foods: {},
-        drinks: {}
-      };
-
-      foodItems.forEach(item => {
-        const input = document.querySelector(`[data-name='${item}']`);
-        const qty = parseInt(input?.value) || 0;
-        if (qty > 0) selections.foods[item] = qty;
-      });
-
-      drinks.forEach(drink => {
-        const input = document.querySelector(`[data-name='${drink}']`);
-        const qty = parseInt(input?.value) || 0;
-        if (qty > 0) selections.drinks[drink] = qty;
-      });
-
-      const query = encodeURIComponent(JSON.stringify(selections));
-      window.location.href = `second.html?order=${query}`;
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const foodNames = ["Instant Noodle", "Fish Cake", "Fuchuk", "Crab Stick", "Fish Ball", "Seafood Tofu", "Enoki Mushroom", "Cheese Tofu", "Egg", "White Radish"];
-      const drinkNames = ["Sprite", "Coca-Cola", "F&N Soda", "A&W", "Pepsi"];
-
-      const foodContainer = document.querySelector("#food-template").parentElement;
-      foodNames.forEach(name => {
-        const clone = document.querySelector("#food-template").content.cloneNode(true);
-        const span = clone.querySelector("span");
-        const input = clone.querySelector("input");
-        span.textContent = name;
-        input.setAttribute('id', name);
-        input.setAttribute('data-name', name);
-        foodContainer.appendChild(clone);
-      });
-
-      const drinkContainer = document.querySelector("#drink-template").parentElement;
-      drinkNames.forEach(name => {
-        const clone = document.querySelector("#drink-template").content.cloneNode(true);
-        const span = clone.querySelector("span");
-        const input = clone.querySelector("input");
-        span.textContent = name;
-        input.setAttribute('id', name);
-        input.setAttribute('data-name', name);
-        drinkContainer.appendChild(clone);
-      });
-    });
-  </script>
+      function updateTotalPrice() {
+        document.getElementById("totalPrice").textContent = selectedSetPrice.toFixed(2);
+      }
+    </script>
+  </div>
 </body>
 
 </html>
