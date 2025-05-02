@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oden - Starting From RM6</title>
+  <title>Order Oden - Starting From RM6</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -47,12 +47,33 @@
       background: #fff;
       border-radius: 12px;
       padding: 1rem;
-      width: 140px;
+      width: 180px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .item label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+      font-weight: bold;
+    }
+    .item input[type="number"] {
+      width: 100%;
+      padding: 0.3rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
     .about, .contact {
       padding: 2rem 1rem;
       text-align: center;
+    }
+    .order-btn {
+      margin-top: 2rem;
+      background: #d32f2f;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
     }
     footer {
       background: #d32f2f;
@@ -60,58 +81,106 @@
       text-align: center;
       padding: 1rem;
     }
-    a.button {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background: #d32f2f;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="logo.jpg" alt="logo.jpg" />
-    <h1>Delicious Oden Bowls</h1>
-    <p class="price">Starting from RM6</p>
-    <a href="#order" class="button">Order Now</a>
-  </header>
+<header>
+  <img src="logo.jpg" alt="Oden Logo" />
+  <h1>Delicious Oden Bowls</h1>
+  <p class="price">Starting from RM6</p>
+</header>
 
-  <section class="menu">
-    <h2>Our Menu Includes:</h2>
+<section class="menu">
+  <h2>Build Your Bowl</h2>
+  <form id="orderForm">
     <div class="items">
-      <div class="item">Instant Noodle</div>
-      <div class="item">Fish Cake</div>
-      <div class="item">Crab Stick</div>
-      <div class="item">Fish Ball</div>
-      <div class="item">Seafood Tofu</div>
-      <div class="item">Cheese Tofu</div>
-      <div class="item">Egg</div>
-      <div class="item">White Radish</div>
-      <div class="item">Enoki Mushroom</div>
-      <div class="item">Fuchuk</div>
+      <div class="item">
+        <label>Instant Noodle</label>
+        <input type="number" name="Instant Noodle" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Fish Cake</label>
+        <input type="number" name="Fish Cake" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Crab Stick</label>
+        <input type="number" name="Crab Stick" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Fish Ball</label>
+        <input type="number" name="Fish Ball" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Seafood Tofu</label>
+        <input type="number" name="Seafood Tofu" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Cheese Tofu</label>
+        <input type="number" name="Cheese Tofu" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Egg</label>
+        <input type="number" name="Egg" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>White Radish</label>
+        <input type="number" name="White Radish" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Enoki Mushroom</label>
+        <input type="number" name="Enoki Mushroom" min="0" value="0">
+      </div>
+      <div class="item">
+        <label>Fuchuk</label>
+        <input type="number" name="Fuchuk" min="0" value="0">
+      </div>
     </div>
-  </section>
+    <div style="text-align:center;">
+      <button type="button" class="order-btn" onclick="submitOrder()">Order via WhatsApp</button>
+    </div>
+  </form>
+</section>
 
-  <section class="about">
-    <h2>About Us</h2>
-    <p>Serving up hot, flavorful Oden bowls perfect for your lunch break or a cozy night in. Affordable, fast, and made with love!</p>
-  </section>
+<section class="about">
+  <h2>About Us</h2>
+  <p>Hot, hearty, and flavorful Oden made just for you! Fast, affordable, and filling—perfect for any time of day.</p>
+</section>
 
-  <section class="contact" id="order">
-    <h2>Order or Visit Us</h2>
-    <p>📍 Your Location Here</p>
-    <p>📞 012-345 6789</p>
-    <p>📱 Follow us @oden.my on Instagram & Facebook</p>
-  </section>
+<section class="contact" id="order">
+  <h2>Contact Us</h2>
+  <p>📍 Your Location Here</p>
+  <p>📞 012-345 6789</p>
+  <p>📱 Follow us @oden.my</p>
+</section>
 
-  <footer>
-    &copy; 2025 Oden. All rights reserved.
-  </footer>
+<footer>
+  &copy; 2025 Oden. All rights reserved.
+</footer>
+
+<script>
+  function submitOrder() {
+    const form = document.getElementById('orderForm');
+    const inputs = form.querySelectorAll('input[type="number"]');
+    let message = 'Hi, I would like to order:\n';
+
+    inputs.forEach(input => {
+      if (parseInt(input.value) > 0) {
+        message += `- ${input.name}: ${input.value}\n`;
+      }
+    });
+
+    if (message === 'Hi, I would like to order:\n') {
+      alert('Please select at least one item.');
+      return;
+    }
+
+    const encodedMessage = encodeURIComponent(message);
+    const phoneNumber = '60123456789'; // Replace with your WhatsApp number (use international format)
+    const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(url, '_blank');
+  }
+</script>
 
 </body>
 </html>
