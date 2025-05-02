@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Order Oden - Starting From RM6</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -19,44 +18,38 @@
       padding: 2rem 1rem;
       background: #ffe6cc;
     }
-    header img {
-      max-width: 200px;
-    }
     h1 {
-      margin-top: 1rem;
-      font-size: 2.2rem;
+      font-size: 2rem;
     }
     .price {
       font-size: 1.5rem;
       color: #d32f2f;
-      font-weight: bold;
     }
-    .menu, .sets, .about, .contact {
+    .sets, .menu {
       padding: 2rem 1rem;
       text-align: center;
     }
-    .items, .sets-container {
+    .sets-container, .items {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
     }
-    .item, .set {
+    .set, .item {
       background: #fff;
-      border-radius: 12px;
       padding: 1rem;
-      width: 180px;
+      border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 200px;
       cursor: pointer;
     }
-    .item img, .set img {
-      width: 100%;
-      border-radius: 10px;
+    .set:hover {
+      background-color: #fff1e6;
     }
     .item label {
-      display: block;
-      margin: 0.5rem 0 0.2rem;
       font-weight: bold;
+      display: block;
+      margin: 0.5rem 0;
     }
     .quantity-controls {
       display: flex;
@@ -65,13 +58,13 @@
       gap: 0.5rem;
     }
     .quantity-controls button {
+      width: 30px;
+      height: 30px;
+      font-size: 1.2rem;
       background: #d32f2f;
       color: white;
       border: none;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      font-size: 1.2rem;
       cursor: pointer;
     }
     .order-btn {
@@ -84,23 +77,22 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    .total-price {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
     footer {
       background: #d32f2f;
       color: white;
       text-align: center;
       padding: 1rem;
     }
-    .total-price {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.jpg" alt="Oden Logo" />
   <h1>Delicious Oden Bowls</h1>
   <p class="price">Starting from RM6</p>
   <p><a href="https://www.instagram.com/thai_oden/" target="_blank">Follow us: <strong>THAI_ODEN</strong></a></p>
@@ -110,18 +102,32 @@
   <h2>Oden Sets</h2>
   <div class="sets-container">
     <div class="set" onclick="selectSet(['Fish Ball','Seafood Tofu','Cheese Tofu'], [1,1,1])">
-      <img src="set1.jpg" alt="Set A" />
-      <h3>Set A</h3>
-      <p>Fish Ball, Seafood Tofu, Cheese Tofu</p>
-      <p><strong>RM6</strong></p>
+      <h3>Set A</h3><p>Fish Ball, Seafood Tofu, Cheese Tofu<br><strong>RM6</strong></p>
     </div>
     <div class="set" onclick="selectSet(['Instant Noodle','Fish Cake','Egg','Fuchuk'], [1,1,1,1])">
-      <img src="set2.jpg" alt="Set B" />
-      <h3>Set B</h3>
-      <p>Instant Noodle, Fish Cake, Egg, Fuchuk</p>
-      <p><strong>RM5</strong></p>
+      <h3>Set B</h3><p>Instant Noodle, Fish Cake, Egg, Fuchuk<br><strong>RM5</strong></p>
     </div>
-    <!-- Add more sets as needed -->
+    <div class="set" onclick="selectSet(['Fish Ball','Cheese Tofu','Enoki Mushroom'], [1,1,1])">
+      <h3>Set C</h3><p>Fish Ball, Cheese Tofu, Enoki Mushroom<br><strong>RM5</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['Seafood Tofu','Crab Stick','Egg'], [1,1,1])">
+      <h3>Set D</h3><p>Seafood Tofu, Crab Stick, Egg<br><strong>RM4</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['Fish Cake','Fuchuk','White Radish'], [1,1,1])">
+      <h3>Set E</h3><p>Fish Cake, Fuchuk, White Radish<br><strong>RM4</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['Instant Noodle','Crab Stick','Egg'], [1,1,1])">
+      <h3>Set F</h3><p>Instant Noodle, Crab Stick, Egg<br><strong>RM4</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['White Radish','Enoki Mushroom','Fuchuk'], [1,1,1])">
+      <h3>Set G</h3><p>White Radish, Enoki Mushroom, Fuchuk<br><strong>RM4</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['Fish Ball','Fish Cake','Seafood Tofu'], [1,1,1])">
+      <h3>Set H</h3><p>Fish Ball, Fish Cake, Seafood Tofu<br><strong>RM5</strong></p>
+    </div>
+    <div class="set" onclick="selectSet(['Cheese Tofu','White Radish','Crab Stick'], [1,1,1])">
+      <h3>Set I</h3><p>Cheese Tofu, White Radish, Crab Stick<br><strong>RM5</strong></p>
+    </div>
   </div>
 </section>
 
@@ -129,55 +135,81 @@
   <h2>Build Your Bowl</h2>
   <form id="orderForm">
     <div class="items">
-      <!-- Example item -->
-      <div class="item">
-        <img src="fishball.jpg" alt="Fish Ball" />
-        <label>Fish Ball (RM2)</label>
+      <!-- 10 items -->
+      <div class="item"><label>Instant Noodle (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('Instant Noodle', -1)">-</button>
+          <input type="number" id="Instant Noodle" name="Instant Noodle" value="0" readonly>
+          <button type="button" onclick="adjustQty('Instant Noodle', 1)">+</button>
+        </div>
+      </div>
+      <div class="item"><label>Fish Cake (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('Fish Cake', -1)">-</button>
+          <input type="number" id="Fish Cake" name="Fish Cake" value="0" readonly>
+          <button type="button" onclick="adjustQty('Fish Cake', 1)">+</button>
+        </div>
+      </div>
+      <div class="item"><label>Crab Stick (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('Crab Stick', -1)">-</button>
+          <input type="number" id="Crab Stick" name="Crab Stick" value="0" readonly>
+          <button type="button" onclick="adjustQty('Crab Stick', 1)">+</button>
+        </div>
+      </div>
+      <div class="item"><label>Fish Ball (RM2)</label>
         <div class="quantity-controls">
           <button type="button" onclick="adjustQty('Fish Ball', -1)">-</button>
           <input type="number" id="Fish Ball" name="Fish Ball" value="0" readonly>
           <button type="button" onclick="adjustQty('Fish Ball', 1)">+</button>
         </div>
       </div>
-
-      <!-- Repeat for other items -->
-      <div class="item">
-        <img src="seafoodtofu.jpg" alt="Seafood Tofu" />
-        <label>Seafood Tofu (RM2)</label>
+      <div class="item"><label>Seafood Tofu (RM2)</label>
         <div class="quantity-controls">
           <button type="button" onclick="adjustQty('Seafood Tofu', -1)">-</button>
           <input type="number" id="Seafood Tofu" name="Seafood Tofu" value="0" readonly>
           <button type="button" onclick="adjustQty('Seafood Tofu', 1)">+</button>
         </div>
       </div>
-      <div class="item">
-        <img src="cheesetofu.jpg" alt="Cheese Tofu" />
-        <label>Cheese Tofu (RM2)</label>
+      <div class="item"><label>Cheese Tofu (RM2)</label>
         <div class="quantity-controls">
           <button type="button" onclick="adjustQty('Cheese Tofu', -1)">-</button>
           <input type="number" id="Cheese Tofu" name="Cheese Tofu" value="0" readonly>
           <button type="button" onclick="adjustQty('Cheese Tofu', 1)">+</button>
         </div>
       </div>
-
-      <!-- RM1 items -->
-      <div class="item">
-        <img src="egg.jpg" alt="Egg" />
-        <label>Egg (RM1)</label>
+      <div class="item"><label>Egg (RM1)</label>
         <div class="quantity-controls">
           <button type="button" onclick="adjustQty('Egg', -1)">-</button>
           <input type="number" id="Egg" name="Egg" value="0" readonly>
           <button type="button" onclick="adjustQty('Egg', 1)">+</button>
         </div>
       </div>
-      <!-- Repeat for other RM1 items -->
+      <div class="item"><label>White Radish (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('White Radish', -1)">-</button>
+          <input type="number" id="White Radish" name="White Radish" value="0" readonly>
+          <button type="button" onclick="adjustQty('White Radish', 1)">+</button>
+        </div>
+      </div>
+      <div class="item"><label>Enoki Mushroom (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('Enoki Mushroom', -1)">-</button>
+          <input type="number" id="Enoki Mushroom" name="Enoki Mushroom" value="0" readonly>
+          <button type="button" onclick="adjustQty('Enoki Mushroom', 1)">+</button>
+        </div>
+      </div>
+      <div class="item"><label>Fuchuk (RM1)</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="adjustQty('Fuchuk', -1)">-</button>
+          <input type="number" id="Fuchuk" name="Fuchuk" value="0" readonly>
+          <button type="button" onclick="adjustQty('Fuchuk', 1)">+</button>
+        </div>
+      </div>
     </div>
 
     <p class="total-price">Total: RM <span id="totalPrice">0.00</span></p>
-
-    <div style="text-align:center;">
-      <button type="button" class="order-btn" onclick="submitOrder()">Order via WhatsApp</button>
-    </div>
+    <button type="button" class="order-btn" onclick="submitOrder()">Order via WhatsApp</button>
   </form>
 </section>
 
@@ -187,12 +219,12 @@
 
 <script>
   const prices = {
-    "Fish Ball": 2,
-    "Seafood Tofu": 2,
-    "Cheese Tofu": 2,
     "Instant Noodle": 1,
     "Fish Cake": 1,
     "Crab Stick": 1,
+    "Fish Ball": 2,
+    "Seafood Tofu": 2,
+    "Cheese Tofu": 2,
     "Egg": 1,
     "White Radish": 1,
     "Enoki Mushroom": 1,
