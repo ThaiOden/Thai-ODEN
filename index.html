@@ -19,11 +19,10 @@
         class="w-full p-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-orange-500" required />
     </div>
 
-    <!-- Soup Flavour Selection -->
-    <div class="mb-4">
-      <label class="block text-lg font-semibold mb-2 text-orange-800">Choose Soup Flavour</label>
-      <select id="soupFlavour"
-        class="w-full p-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-orange-500">
+    <!-- Soup Flavour -->
+    <div class="mb-6">
+      <label class="block text-lg font-semibold mb-2 text-orange-800">Soup Flavour</label>
+      <select id="soupFlavour" class="w-full p-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-orange-500">
         <option value="Original Flavour">Original Flavour</option>
         <option value="Tom Yam">Tom Yam</option>
       </select>
@@ -42,6 +41,9 @@
         <button onclick="selectSet('Premium', 15, this)" class="set-button bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
       </div>
       <button onclick="clearSetSelection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Clear Set Selection</button>
+
+      <!-- Display Set Items -->
+      <div id="setItemsDisplay" class="mt-4 text-orange-800 font-medium"></div>
     </div>
 
     <!-- Food & Drinks -->
@@ -75,6 +77,16 @@
     let activeButton = null;
     let additionalItems = {};
 
+    const setItems = {
+      A: ["Instant Noodle", "Fish Cake", "Fuchuk"],
+      B: ["Crab Stick", "Fish Ball", "Seafood Tofu"],
+      C: ["Enoki Mushroom", "Cheese Tofu", "Egg"],
+      D: ["White Radish", "Crab Stick", "Seafood Tofu"],
+      E: ["Enoki Mushroom", "Fish Cake", "White Radish", "Cheese Tofu"],
+      F: ["Instant Noodle", "Fuchuk", "Fish Ball", "Enoki Mushroom"],
+      Premium: ["Crab Stick", "Fish Cake", "Fuchuk", "Seafood Tofu", "Cheese Tofu", "White Radish"]
+    };
+
     const foodItems = [
       { name: 'Instant Noodle', price: 1 },
       { name: 'Fish Cake', price: 1 },
@@ -102,6 +114,7 @@
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       button.classList.add('bg-orange-200');
       activeButton = button;
+      showSetItems(name);
       updateTotalPrice();
     }
 
@@ -110,7 +123,14 @@
       selectedSetPrice = 0;
       if (activeButton) activeButton.classList.remove('bg-orange-200');
       activeButton = null;
+      document.getElementById("setItemsDisplay").innerHTML = "";
       updateTotalPrice();
+    }
+
+    function showSetItems(name) {
+      const items = setItems[name] || [];
+      const display = items.map(item => `• ${item}`).join("<br>");
+      document.getElementById("setItemsDisplay").innerHTML = `<strong>Included Items:</strong><br>${display}`;
     }
 
     function createItemControls(containerId, items) {
@@ -170,9 +190,8 @@
 
     function submitOrder() {
       const name = document.getElementById('customerName').value.trim();
+      const soupFlavour = document.getElementById('soupFlavour').value;
       if (!name) return alert("Please enter your name!");
-
-      const flavour = document.getElementById('soupFlavour').value;
 
       const now = new Date();
       const dateTime = now.toLocaleString('en-GB', {
@@ -180,7 +199,7 @@
         hour: '2-digit', minute: '2-digit', hour12: true
       }).replace(',', '');
 
-      let message = `🧡 Oden Order 🧡%0A👤 Name: ${name}%0A🍲 Soup Flavour: ${flavour}`;
+      let message = `🧡 Oden Order 🧡%0A👤 Name: ${name}%0A🍲 Flavour: ${soupFlavour}`;
       if (selectedSet) message += `%0A🍢 Set: ${selectedSet} (RM${selectedSetPrice.toFixed(2)})`;
 
       message += `%0A%0A--- Items ---`;
