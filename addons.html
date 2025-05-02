@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add-ons & Drinks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .item-name {
+      flex: 1;
+    }
+    .quantity {
+      display: flex;
+      align-items: center;
+    }
+    .quantity button {
+      width: 30px;
+      height: 30px;
+    }
+    .quantity span {
+      margin: 0 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+    .total {
+      font-size: 1.5em;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .submit-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Add-ons & Drinks</h1>
+
+  <h2>Add-ons (RM2 each)</h2>
+  <div id="addonsList">
+    <!-- Add-on items -->
+    <div class="item">
+      <span class="item-name">Cheese Tofu</span>
+      <div class="quantity">
+        <button onclick="adjustQuantity('Cheese Tofu', -1)">-</button>
+        <span id="qty-Cheese Tofu">0</span>
+        <button onclick="adjustQuantity('Cheese Tofu', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-name">White Radish (2 pcs)</span>
+      <div class="quantity">
+        <button onclick="adjustQuantity('White Radish', -1)">-</button>
+        <span id="qty-White Radish">0</span>
+        <button onclick="adjustQuantity('White Radish', 1)">+</button>
+      </div>
+    </div>
+    <!-- Add more add-ons here if needed -->
+  </div>
+
+  <h2>Drinks</h2>
+  <div id="drinksList">
+    <div class="item">
+      <span class="item-name">Mineral Water (RM1.50)</span>
+      <div class="quantity">
+        <button onclick="adjustQuantity('Mineral Water', -1)">-</button>
+        <span id="qty-Mineral Water">0</span>
+        <button onclick="adjustQuantity('Mineral Water', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-name">Green Tea (RM2.50)</span>
+      <div class="quantity">
+        <button onclick="adjustQuantity('Green Tea', -1)">-</button>
+        <span id="qty-Green Tea">0</span>
+        <button onclick="adjustQuantity('Green Tea', 1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="total" id="grandTotal">Total: RM0.00</div>
+
+  <button class="submit-btn" onclick="submitOrder()">Submit Order</button>
+
+  <script>
+    const prices = {
+      "Cheese Tofu": 2.00,
+      "White Radish": 2.00,
+      "Mineral Water": 1.50,
+      "Green Tea": 2.50,
+    };
+
+    let quantities = {
+      "Cheese Tofu": 0,
+      "White Radish": 0,
+      "Mineral Water": 0,
+      "Green Tea": 0,
+    };
+
+    function adjustQuantity(item, delta) {
+      quantities[item] = Math.max(0, (quantities[item] || 0) + delta);
+      document.getElementById("qty-" + item).innerText = quantities[item];
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let addOnTotal = 0;
+      for (let item in quantities) {
+        addOnTotal += quantities[item] * prices[item];
+      }
+
+      const setPrice = parseFloat(localStorage.getItem("selectedSetPrice")) || 0;
+      const grandTotal = setPrice + addOnTotal;
+
+      document.getElementById("grandTotal").innerText = `Total: RM${grandTotal.toFixed(2)}`;
+    }
+
+    function submitOrder() {
+      const selectedSet = localStorage.getItem("selectedSet") || "None";
+      const setPrice = parseFloat(localStorage.getItem("selectedSetPrice")) || 0;
+
+      let orderSummary = `Set: ${selectedSet} (RM${setPrice.toFixed(2)})\n\nAdd-ons & Drinks:\n`;
+
+      for (let item in quantities) {
+        if (quantities[item] > 0) {
+          orderSummary += `${item}: ${quantities[item]} x RM${prices[item].toFixed(2)}\n`;
+        }
+      }
+
+      const grandTotal = document.getElementById("grandTotal").innerText;
+
+      alert(`${orderSummary}\n${grandTotal}\n\nThank you for your order!`);
+      // Optionally reset or send to a backend
+    }
+
+    // Calculate total on page load in case of reload
+    window.addEventListener("DOMContentLoaded", updateTotal);
+  </script>
+</body>
+</html>
