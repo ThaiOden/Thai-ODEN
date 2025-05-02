@@ -1,149 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oden Order</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { margin-top: 40px; }
-    .section { margin-bottom: 30px; }
-    .item { display: flex; align-items: center; justify-content: space-between; margin: 5px 0; }
-    .item button { width: 30px; height: 30px; }
-    .item span { margin: 0 10px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oden Ordering</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-  <h1>Oden Set Order</h1>
+<body class="bg-orange-50 font-sans">
+  <div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center text-orange-700 mb-6">Oden Set Selection</h1>
 
-  <div class="section" id="set-section">
-    <h2>Select Oden Set</h2>
-    <select id="odenSet" onchange="updateTotal()">
-      <option value="">-- Choose a Set --</option>
-      <option value="Set A|6">Set A - RM6</option>
-      <option value="Set B|6">Set B - RM6</option>
-      <option value="Set C|8">Set C - RM8</option>
-      <option value="Set D|8">Set D - RM8</option>
-      <option value="Set E|10">Set E - RM10</option>
-      <option value="Set F|10">Set F - RM10</option>
-      <option value="Premium|15">Premium Set - RM15</option>
-    </select>
-  </div>
+    <!-- Set Selection -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <button onclick="selectSet('A')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set A (RM6)</button>
+      <button onclick="selectSet('B')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set B (RM6)</button>
+      <button onclick="selectSet('C')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set C (RM8)</button>
+      <button onclick="selectSet('D')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set D (RM8)</button>
+      <button onclick="selectSet('E')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set E (RM10)</button>
+      <button onclick="selectSet('F')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Set F (RM10)</button>
+      <button onclick="selectSet('Premium')" class="bg-white p-4 rounded shadow hover:bg-orange-100">Premium Set (RM15)</button>
+    </div>
 
-  <div class="section" id="addon-section">
-    <h2>Add-On Items</h2>
-    <div id="addOns"></div>
-  </div>
+    <!-- Individual Food Selection -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-orange-700 mb-4">Individual Food Selection (RM2 each, White Radish unit: 2)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <template id="food-template">
+          <div class="flex justify-between items-center bg-white p-3 rounded shadow">
+            <span class="font-medium"></span>
+            <div class="flex items-center space-x-2">
+              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="w-12 text-center border rounded" value="0" min="0">
+              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
 
-  <div class="section" id="drinks-section">
-    <h2>Drinks</h2>
-    <div id="drinks"></div>
-  </div>
+    <!-- Drink Selection -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-orange-700 mb-4">Drink Selection (RM3 each)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <template id="drink-template">
+          <div class="flex justify-between items-center bg-white p-3 rounded shadow">
+            <span class="font-medium"></span>
+            <div class="flex items-center space-x-2">
+              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="w-12 text-center border rounded" value="0" min="0">
+              <button class="px-2 py-1 bg-orange-200 rounded" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>Phone Number</h2>
-    <input type="tel" id="phone" placeholder="e.g., 60123456789" />
-  </div>
-
-  <div class="section">
-    <h2>Total: RM <span id="total">0.00</span></h2>
-    <button onclick="submitOrder()">Submit Order via WhatsApp</button>
+    <!-- Next Button -->
+    <div class="text-center">
+      <button onclick="goToAddOnPage()" class="px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700">Next</button>
+    </div>
   </div>
 
   <script>
-    const addOnItems = [
-      { name: 'Instant Noodle', price: 1 },
-      { name: 'Fish Cake', price: 1 },
-      { name: 'Fuchuk', price: 1 },
-      { name: 'Crab Stick', price: 1 },
-      { name: 'Fish Ball', price: 2 },
-      { name: 'Seafood Tofu', price: 2 },
-      { name: 'Enoki Mushroom', price: 1 },
-      { name: 'Cheese Tofu', price: 2 },
-      { name: 'Egg', price: 1 },
-      { name: 'White Radish', price: 1 },
-    ];
+    let selectedSet = '';
 
-    const drinkItems = [
-      { name: 'SPRITE', price: 2.5 },
-      { name: 'COCA - COLA', price: 2.5 },
-      { name: 'F&N SODA', price: 2.5 },
-      { name: 'A&W', price: 2.5 },
-      { name: 'PEPSI', price: 2.5 },
-    ];
-
-    const quantities = {};
-    let setPrice = 0;
-
-    function createItemUI(items, containerId) {
-      const container = document.getElementById(containerId);
-      items.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <span>${item.name} (RM${item.price})</span>
-          <button onclick="changeQty('${item.name}', -1)">-</button>
-          <span id="${item.name}-qty">0</span>
-          <button onclick="changeQty('${item.name}', 1)">+</button>
-        `;
-        container.appendChild(div);
-        quantities[item.name] = 0;
-      });
+    function selectSet(set) {
+      selectedSet = set;
+      alert(`You selected Set ${set}`);
     }
 
-    function changeQty(item, delta) {
-      quantities[item] = Math.max(0, quantities[item] + delta);
-      document.getElementById(`${item}-qty`).textContent = quantities[item];
-      updateTotal();
+    function changeQty(button, delta) {
+      const input = button.parentElement.querySelector('input');
+      let value = parseInt(input.value) || 0;
+      value = Math.max(0, value + delta);
+      input.value = value;
     }
 
-    function updateTotal() {
-      const set = document.getElementById('odenSet').value;
-      setPrice = 0;
-      if (set) {
-        setPrice = parseFloat(set.split('|')[1]);
-      }
-
-      let addonTotal = 0;
-      [...addOnItems, ...drinkItems].forEach(item => {
-        addonTotal += quantities[item.name] * item.price;
-      });
-
-      const total = setPrice + addonTotal;
-      document.getElementById('total').textContent = total.toFixed(2);
-    }
-
-    function submitOrder() {
-      const phone = document.getElementById('phone').value;
-      if (!phone) {
-        alert('Please enter your phone number!');
+    function goToAddOnPage() {
+      if (!selectedSet) {
+        alert('Please select a set before continuing.');
         return;
       }
 
-      const set = document.getElementById('odenSet').value.split('|')[0] || 'None';
-      let message = `Order Details:\nSet: ${set}\n`;
+      const foodItems = ["Instant Noodle", "Fish Cake", "Fuchuk", "Crab Stick", "Fish Ball", "Seafood Tofu", "Enoki Mushroom", "Cheese Tofu", "Egg", "White Radish"];
+      const drinks = ["Sprite", "Coca-Cola", "F&N Soda", "A&W", "Pepsi"];
+      const selections = {
+        set: selectedSet,
+        foods: {},
+        drinks: {}
+      };
 
-      const addons = Object.entries(quantities).filter(([_, qty]) => qty > 0);
-      if (addons.length > 0) {
-        message += `Add-ons:\n`;
-        addons.forEach(([name, qty]) => {
-          message += `- ${name}: ${qty}\n`;
-        });
-      }
+      foodItems.forEach(item => {
+        const input = document.querySelector(`[data-name='${item}']`);
+        const qty = parseInt(input?.value) || 0;
+        if (qty > 0) selections.foods[item] = qty;
+      });
 
-      const total = document.getElementById('total').textContent;
-      message += `Total: RM${total}`;
+      drinks.forEach(drink => {
+        const input = document.querySelector(`[data-name='${drink}']`);
+        const qty = parseInt(input?.value) || 0;
+        if (qty > 0) selections.drinks[drink] = qty;
+      });
 
-      const encoded = encodeURIComponent(message);
-      const link = `https://wa.me/${phone}?text=${encoded}`;
-      window.open(link, '_blank');
+      const query = encodeURIComponent(JSON.stringify(selections));
+      window.location.href = `second.html?order=${query}`;
     }
 
-    // Initialize UI
-    createItemUI(addOnItems, 'addOns');
-    createItemUI(drinkItems, 'drinks');
-  </script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const foodNames = ["Instant Noodle", "Fish Cake", "Fuchuk", "Crab Stick", "Fish Ball", "Seafood Tofu", "Enoki Mushroom", "Cheese Tofu", "Egg", "White Radish"];
+      const drinkNames = ["Sprite", "Coca-Cola", "F&N Soda", "A&W", "Pepsi"];
 
+      const foodContainer = document.querySelector("#food-template").parentElement;
+      foodNames.forEach(name => {
+        const clone = document.querySelector("#food-template").content.cloneNode(true);
+        const span = clone.querySelector("span");
+        const input = clone.querySelector("input");
+        span.textContent = name;
+        input.setAttribute('id', name);
+        input.setAttribute('data-name', name);
+        foodContainer.appendChild(clone);
+      });
+
+      const drinkContainer = document.querySelector("#drink-template").parentElement;
+      drinkNames.forEach(name => {
+        const clone = document.querySelector("#drink-template").content.cloneNode(true);
+        const span = clone.querySelector("span");
+        const input = clone.querySelector("input");
+        span.textContent = name;
+        input.setAttribute('id', name);
+        input.setAttribute('data-name', name);
+        drinkContainer.appendChild(clone);
+      });
+    });
+  </script>
 </body>
+
 </html>
