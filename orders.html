@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oden Order Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #fff7ed;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .order-summary {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+    .order-summary ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .order-summary li {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+    .total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .send-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Oden Order Summary</h1>
+  <div class="order-summary">
+    <ul id="orderDetails"></ul>
+    <div class="total" id="totalPrice">Total: RM0</div>
+    <button class="send-btn" onclick="sendToWhatsApp()">Send to WhatsApp</button>
+  </div>
+
+  <script>
+    function loadOrderSummary() {
+      const orderList = document.getElementById('orderDetails');
+      const totalEl = document.getElementById('totalPrice');
+      const storedOrder = JSON.parse(localStorage.getItem('fullOrder')) || [];
+      let total = 0;
+
+      storedOrder.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} x ${item.qty} = RM${(item.qty * item.price).toFixed(2)}`;
+        orderList.appendChild(li);
+        total += item.qty * item.price;
+      });
+
+      totalEl.textContent = `Total: RM${total.toFixed(2)}`;
+    }
+
+    function sendToWhatsApp() {
+      const storedOrder = JSON.parse(localStorage.getItem('fullOrder')) || [];
+      let msg = 'Order Summary:%0A';
+      let total = 0;
+      storedOrder.forEach(item => {
+        if (item.qty > 0) {
+          msg += `- ${item.name} x ${item.qty} = RM${(item.qty * item.price).toFixed(2)}%0A`;
+          total += item.qty * item.price;
+        }
+      });
+      msg += `%0ATotal: RM${total.toFixed(2)}`;
+      const phoneNumber = '60123456789'; // Replace with actual WhatsApp number
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${msg}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOrderSummary);
+  </script>
+</body>
+</html>
